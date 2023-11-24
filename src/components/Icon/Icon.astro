@@ -1,0 +1,35 @@
+---
+import MoneyBag from "./MoneyBag.astro";
+
+export interface Props {
+	name: "money-bag";
+	iconWidth: string;
+}
+
+const { name, iconWidth } = Astro.props;
+
+const iconMap: {
+	/* eslint-disable @typescript-eslint/no-explicit-any */
+	[key in Partial<Props["name"]>]: (_props: Record<string, any>) => any;
+} = {
+	"money-bag": MoneyBag,
+};
+
+const IconComponent = iconMap[name];
+---
+
+<div class="icon-wrapper" style=`--icon-width: ${iconWidth};`>
+	<IconComponent />
+</div>
+
+<style lang="scss" is:global>
+	.icon-wrapper {
+		width: calc(var(--icon-width) * 1px);
+
+		svg {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+	}
+</style>
