@@ -1,0 +1,60 @@
+@use "../mixins/grid";
+@include grid.make-grid-classes;
+
+.u-flex-grid {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.u-column {
+	flex: 0 1 auto;
+	padding: 12px;
+}
+
+.u-col-12 {
+	flex-basis: 100%;
+}
+
+.u-col-11 {
+	flex-basis: calc(100% / 12 * 11);
+}
+
+.u-col-10 {
+	flex-basis: calc(100% / 12 * 10);
+}
+
+.u-col-9 {
+	flex-basis: calc(100% / 12 * 9);
+}
+
+.u-col-8 {
+	flex-basis: calc(100% / 12 * 8);
+}
+
+.u-col-7 {
+	flex-basis: calc(100% / 12 * 7);
+}
+
+.u-col-6 {
+	flex-basis: calc(100% / 12 * 6);
+}
+
+.u-col-5 {
+	flex-basis: calc(100% / 12 * 5);
+}
+
+.u-col-4 {
+	flex-basis: calc(100% / 12 * 4);
+}
+
+.u-col-3 {
+	flex-basis: calc(100% / 12 * 3);
+}
+
+.u-col-2 {
+	flex-basis: calc(100% / 12 * 2);
+}
+
+.u-col-1 {
+	flex-basis: calc(100% / 12);
+}

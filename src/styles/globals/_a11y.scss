@@ -1,0 +1,8 @@
+.visually-hidden {
+	position: absolute;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	pointer-events: none;
+	clip-path: circle(0);
+}

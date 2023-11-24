@@ -1,0 +1,36 @@
+@use "../variables";
+
+// >= 576px
+@mixin sm-up {
+	@media only screen and (min-width: variables.$bp-sm) {
+		@content;
+	}
+}
+
+// >= 768px
+@mixin md-up {
+	@media only screen and (min-width: variables.$bp-md) {
+		@content;
+	}
+}
+
+// >= 992px
+@mixin lg-up {
+	@media only screen and (min-width: variables.$bp-lg) {
+		@content;
+	}
+}
+
+// >= 1200px
+@mixin xl-up {
+	@media only screen and (min-width: variables.$bp-xl) {
+		@content;
+	}
+}
+
+// >= 1440px
+@mixin xxl-up {
+	@media only screen and (min-width: variables.$bp-xxl) {
+		@content;
+	}
+}

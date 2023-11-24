@@ -1,0 +1,306 @@
+/** fluid type scales
+ * @link https://utopia.fyi/type/calculator?c=320,18,1.2,960,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12
+ */
+/**
+ * Line Heights
+ */
+/**
+ * Font Weights
+ */
+.column-1 {
+  flex-basis: 8.3333333333%;
+}
+
+.column-2 {
+  flex-basis: 16.6666666667%;
+}
+
+.column-3 {
+  flex-basis: 25%;
+}
+
+.column-4 {
+  flex-basis: 33.3333333333%;
+}
+
+.column-5 {
+  flex-basis: 41.6666666667%;
+}
+
+.column-6 {
+  flex-basis: 50%;
+}
+
+.column-7 {
+  flex-basis: 58.3333333333%;
+}
+
+.column-8 {
+  flex-basis: 66.6666666667%;
+}
+
+.column-9 {
+  flex-basis: 75%;
+}
+
+.column-10 {
+  flex-basis: 83.3333333333%;
+}
+
+.column-11 {
+  flex-basis: 91.6666666667%;
+}
+
+.column-12 {
+  flex-basis: 100%;
+}
+
+@media (min-width: 576px) {
+  .column-sm-1 {
+    flex-basis: 8.3333333333%;
+  }
+  .column-sm-2 {
+    flex-basis: 16.6666666667%;
+  }
+  .column-sm-3 {
+    flex-basis: 25%;
+  }
+  .column-sm-4 {
+    flex-basis: 33.3333333333%;
+  }
+  .column-sm-5 {
+    flex-basis: 41.6666666667%;
+  }
+  .column-sm-6 {
+    flex-basis: 50%;
+  }
+  .column-sm-7 {
+    flex-basis: 58.3333333333%;
+  }
+  .column-sm-8 {
+    flex-basis: 66.6666666667%;
+  }
+  .column-sm-9 {
+    flex-basis: 75%;
+  }
+  .column-sm-10 {
+    flex-basis: 83.3333333333%;
+  }
+  .column-sm-11 {
+    flex-basis: 91.6666666667%;
+  }
+  .column-sm-12 {
+    flex-basis: 100%;
+  }
+}
+@media (min-width: 768px) {
+  .column-md-1 {
+    flex-basis: 8.3333333333%;
+  }
+  .column-md-2 {
+    flex-basis: 16.6666666667%;
+  }
+  .column-md-3 {
+    flex-basis: 25%;
+  }
+  .column-md-4 {
+    flex-basis: 33.3333333333%;
+  }
+  .column-md-5 {
+    flex-basis: 41.6666666667%;
+  }
+  .column-md-6 {
+    flex-basis: 50%;
+  }
+  .column-md-7 {
+    flex-basis: 58.3333333333%;
+  }
+  .column-md-8 {
+    flex-basis: 66.6666666667%;
+  }
+  .column-md-9 {
+    flex-basis: 75%;
+  }
+  .column-md-10 {
+    flex-basis: 83.3333333333%;
+  }
+  .column-md-11 {
+    flex-basis: 91.6666666667%;
+  }
+  .column-md-12 {
+    flex-basis: 100%;
+  }
+}
+@media (min-width: 992px) {
+  .column-lg-1 {
+    flex-basis: 8.3333333333%;
+  }
+  .column-lg-2 {
+    flex-basis: 16.6666666667%;
+  }
+  .column-lg-3 {
+    flex-basis: 25%;
+  }
+  .column-lg-4 {
+    flex-basis: 33.3333333333%;
+  }
+  .column-lg-5 {
+    flex-basis: 41.6666666667%;
+  }
+  .column-lg-6 {
+    flex-basis: 50%;
+  }
+  .column-lg-7 {
+    flex-basis: 58.3333333333%;
+  }
+  .column-lg-8 {
+    flex-basis: 66.6666666667%;
+  }
+  .column-lg-9 {
+    flex-basis: 75%;
+  }
+  .column-lg-10 {
+    flex-basis: 83.3333333333%;
+  }
+  .column-lg-11 {
+    flex-basis: 91.6666666667%;
+  }
+  .column-lg-12 {
+    flex-basis: 100%;
+  }
+}
+@media (min-width: 1200px) {
+  .column-xl-1 {
+    flex-basis: 8.3333333333%;
+  }
+  .column-xl-2 {
+    flex-basis: 16.6666666667%;
+  }
+  .column-xl-3 {
+    flex-basis: 25%;
+  }
+  .column-xl-4 {
+    flex-basis: 33.3333333333%;
+  }
+  .column-xl-5 {
+    flex-basis: 41.6666666667%;
+  }
+  .column-xl-6 {
+    flex-basis: 50%;
+  }
+  .column-xl-7 {
+    flex-basis: 58.3333333333%;
+  }
+  .column-xl-8 {
+    flex-basis: 66.6666666667%;
+  }
+  .column-xl-9 {
+    flex-basis: 75%;
+  }
+  .column-xl-10 {
+    flex-basis: 83.3333333333%;
+  }
+  .column-xl-11 {
+    flex-basis: 91.6666666667%;
+  }
+  .column-xl-12 {
+    flex-basis: 100%;
+  }
+}
+@media (min-width: 1440px) {
+  .column-xxl-1 {
+    flex-basis: 8.3333333333%;
+  }
+  .column-xxl-2 {
+    flex-basis: 16.6666666667%;
+  }
+  .column-xxl-3 {
+    flex-basis: 25%;
+  }
+  .column-xxl-4 {
+    flex-basis: 33.3333333333%;
+  }
+  .column-xxl-5 {
+    flex-basis: 41.6666666667%;
+  }
+  .column-xxl-6 {
+    flex-basis: 50%;
+  }
+  .column-xxl-7 {
+    flex-basis: 58.3333333333%;
+  }
+  .column-xxl-8 {
+    flex-basis: 66.6666666667%;
+  }
+  .column-xxl-9 {
+    flex-basis: 75%;
+  }
+  .column-xxl-10 {
+    flex-basis: 83.3333333333%;
+  }
+  .column-xxl-11 {
+    flex-basis: 91.6666666667%;
+  }
+  .column-xxl-12 {
+    flex-basis: 100%;
+  }
+}
+.u-flex-grid {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.u-column {
+  flex: 0 1 auto;
+  padding: 12px;
+}
+
+.u-col-12 {
+  flex-basis: 100%;
+}
+
+.u-col-11 {
+  flex-basis: 91.6666666667%;
+}
+
+.u-col-10 {
+  flex-basis: 83.3333333333%;
+}
+
+.u-col-9 {
+  flex-basis: 75%;
+}
+
+.u-col-8 {
+  flex-basis: 66.6666666667%;
+}
+
+.u-col-7 {
+  flex-basis: 58.3333333333%;
+}
+
+.u-col-6 {
+  flex-basis: 50%;
+}
+
+.u-col-5 {
+  flex-basis: 41.6666666667%;
+}
+
+.u-col-4 {
+  flex-basis: 33.3333333333%;
+}
+
+.u-col-3 {
+  flex-basis: 25%;
+}
+
+.u-col-2 {
+  flex-basis: 16.6666666667%;
+}
+
+.u-col-1 {
+  flex-basis: 8.3333333333%;
+}
+
+/*# sourceMappingURL=grid.css.map */

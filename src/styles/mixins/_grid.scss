@@ -1,0 +1,19 @@
+@use "../variables";
+
+@mixin make-grid-classes() {
+	@for $i from 1 through 12 {
+		.column-#{$i} {
+			flex-basis: calc(100% / 12 * $i);
+		}
+	}
+
+	@each $bp-name, $bp-value in variables.$breakpoints-map {
+		@media only screen and (min-width: $bp-value) {
+			@for $i from 1 through 12 {
+				.column-#{$bp-name}-#{$i} {
+					flex-basis: calc(100% / 12 * $i);
+				}
+			}
+		}
+	}
+}

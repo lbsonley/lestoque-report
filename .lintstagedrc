@@ -1,0 +1,5 @@
+{
+	"*.{js,ts,jsx,tsx,astro,scss}": "npm run pretty",
+	"*.{js,ts,jsx,tsx,astro}": "npm run lint:js",
+	"*.scss": "npm run lint:css"
+}
