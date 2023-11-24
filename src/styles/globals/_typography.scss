@@ -45,3 +45,10 @@ h4 {
 p {
 	margin-bottom: variables.$space-flex-16;
 }
+
+.lead {
+	color: variables.$color-blue-600;
+	font-family: variables.$font-family-italic;
+	font-size: variables.$font-size-h4;
+	font-weight: variables.$font-weight-bold;
+}

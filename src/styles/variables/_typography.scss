@@ -1,8 +1,23 @@
 // typography
 
-$font-family-base: -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
-	helvetica, arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-	"Segoe UI Symbol";
+@font-face {
+	font-family: "sortsmillgoudy";
+	font-style: normal;
+	font-weight: normal;
+	src: url("/fonts/SortsMillGoudy-Regular.ttf") format("truetype");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "sortsmillgoudy-italic";
+	font-style: normal;
+	font-weight: normal;
+	src: url("/fonts/SortsMillGoudy-Italic.ttf") format("truetype");
+	font-display: swap;
+}
+
+$font-family-base: sortsmillgoudy, serif;
+$font-family-italic: sortsmillgoudy-italic, serif;
 
 /* @link https://utopia.fyi/type/calculator?c=320,16,1.2,960,18,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
