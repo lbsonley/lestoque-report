@@ -1,0 +1,61 @@
+---
+import type { PriceDataRaw } from "@utils/map-data.ts";
+
+interface Props {
+	priceData: PriceDataRaw;
+}
+
+const { priceData } = Astro.props;
+---
+
+<!-- Wrap the component elements in our custom element “candlestick-chart”. -->
+<candlestick-chart data-price-data={priceData}>
+	<div class="candlestick-chart__wrapper"></div>
+</candlestick-chart>
+
+<style lang="scss">
+	.candlestick-chart__wrapper {
+		width: 60%;
+		aspect-ratio: 16/9;
+		overflow: hidden;
+	}
+</style>
+
+<script>
+	import { createChart } from "lightweight-charts";
+	import { mapPriceData } from "@utils/map-data.ts";
+
+	// Define the behaviour for our new type of HTML element.
+	class CandlestickChart extends HTMLElement {
+		constructor() {
+			super();
+
+			const priceData = mapPriceData(JSON.parse(this.dataset.priceData!));
+
+			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
+			const chart = createChart(chartWrapper as string | HTMLElement, {
+				autoSize: true,
+				handleScale: false,
+				handleScroll: false,
+				timeScale: {
+					rightOffset: 3,
+					timeVisible: true,
+				},
+			});
+
+			const candlestickSeries = chart.addCandlestickSeries({
+				upColor: "#26a69a",
+				downColor: "#ef5350",
+				borderVisible: false,
+				wickUpColor: "#26a69a",
+				wickDownColor: "#ef5350",
+			});
+			candlestickSeries.setData(priceData);
+
+			chart.timeScale().fitContent();
+		}
+	}
+
+	// Tell the browser to use our CandlestickChart class for <candlestick-chart> elements.
+	customElements.define("candlestick-chart", CandlestickChart);
+</script>
