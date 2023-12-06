@@ -8,17 +8,17 @@ interface Props {
 const { symbol } = Astro.props;
 
 const responseWeekly = await fetch(
-	`http://localhost:3000/api/history?symbol=${symbol}&weeks=52&interval=1wk`,
+	`https://yf-api-lbsonley-ben-sonley-s-team.vercel.app/api/history?symbol=${symbol}&weeks=52&interval=1wk`,
 );
 const weeklyData = await responseWeekly.json();
 
 const responseDaily = await fetch(
-	`http://localhost:3000/api/history?symbol=${symbol}&weeks=13&interval=1d`,
+	`https://yf-api-lbsonley-ben-sonley-s-team.vercel.app/api/history?symbol=${symbol}&weeks=13&interval=1d`,
 );
 const dailyData = await responseDaily.json();
 
 const responseIntraday = await fetch(
-	`http://localhost:3000/api/history?symbol=${symbol}&weeks=1&interval=30m`,
+	`https://yf-api-lbsonley-ben-sonley-s-team.vercel.app/api/history?symbol=${symbol}&weeks=1&interval=30m`,
 );
 const intradayData = await responseIntraday.json();
 ---
