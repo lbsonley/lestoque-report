@@ -1,8 +1,6 @@
 ---
-import type { PriceDataRaw } from "@utils/map-data.ts";
-
 interface Props {
-	priceData: PriceDataRaw;
+	priceData: string;
 }
 
 const { priceData } = Astro.props;
@@ -24,13 +22,16 @@ const { priceData } = Astro.props;
 <script>
 	import { createChart } from "lightweight-charts";
 	import { mapPriceData } from "@utils/map-data.ts";
+	import type { PriceData } from "@utils/map-data.ts";
 
 	// Define the behaviour for our new type of HTML element.
 	class CandlestickChart extends HTMLElement {
 		constructor() {
 			super();
 
-			const priceData = mapPriceData(JSON.parse(this.dataset.priceData!));
+			const priceData: PriceData = mapPriceData(
+				JSON.parse(this.dataset.priceData!),
+			);
 
 			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
 			const chart = createChart(chartWrapper as string | HTMLElement, {

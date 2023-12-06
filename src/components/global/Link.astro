@@ -1,0 +1,19 @@
+---
+export interface Props {
+	href: string;
+	title: string;
+}
+
+const { title, href } = Astro.props;
+---
+
+<a href={href} class="link">{title}</a>
+
+<style lang="scss">
+	@use "../../styles/variables";
+
+	.link {
+		display: inline-block;
+		padding: variables.$space-12 0;
+	}
+</style>

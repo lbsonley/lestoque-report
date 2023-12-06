@@ -1,0 +1,24 @@
+---
+import LinkList from "@components/global/LinkList.astro";
+
+export interface ReportMap {
+	[key: string]: { title: string; href: string }[];
+}
+
+interface Props {
+	reportMap: ReportMap;
+}
+
+const { reportMap } = Astro.props;
+---
+
+<div>
+	{
+		Object.entries(reportMap).map(([date, reports]) => (
+			<>
+				<h3>{date}</h3>
+				<LinkList links={reports} />
+			</>
+		))
+	}
+</div>

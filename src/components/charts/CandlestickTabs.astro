@@ -1,0 +1,35 @@
+---
+import Candlestick from "@components/charts/Candlestick.astro";
+
+interface Props {
+	symbol: string;
+}
+
+const { symbol } = Astro.props;
+
+const responseWeekly = await fetch(
+	`http://localhost:3000/api/history?symbol=${symbol}&weeks=52&interval=1wk`,
+);
+const weeklyData = await responseWeekly.json();
+
+const responseDaily = await fetch(
+	`http://localhost:3000/api/history?symbol=${symbol}&weeks=13&interval=1d`,
+);
+const dailyData = await responseDaily.json();
+
+const responseIntraday = await fetch(
+	`http://localhost:3000/api/history?symbol=${symbol}&weeks=1&interval=30m`,
+);
+const intradayData = await responseIntraday.json();
+---
+
+<div class="candlestick-tabs">
+	<h2>{symbol} - 52 Week - Weekly</h2>
+	<Candlestick priceData={JSON.stringify(weeklyData)} />
+
+	<h2>{symbol} - 13 Week - Daily</h2>
+	<Candlestick priceData={JSON.stringify(dailyData)} />
+
+	<h2>{symbol} - 1 Week - 30m</h2>
+	<Candlestick priceData={JSON.stringify(intradayData)} />
+</div>
