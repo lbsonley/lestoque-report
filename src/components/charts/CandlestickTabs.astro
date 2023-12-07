@@ -13,6 +13,9 @@ const isProd = import.meta.env.PROD;
 
 const domain = isProd ? "https://yf-api.vercel.app" : "http://localhost:3000";
 
+const responseInfo = await fetch(`${domain}/api/info?symbol=${symbol}`);
+const info = await responseInfo.json();
+
 const responseWeekly = await fetch(
 	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk&date=${endDate}`,
 );
@@ -29,29 +32,38 @@ const responseIntraday = await fetch(
 const intradayData = await responseIntraday.json();
 ---
 
-<Tabs>
-	<Fragment slot="tab-1">52Wk</Fragment>
-	<Fragment slot="tab-2">13Wk</Fragment>
-	<Fragment slot="tab-3">1Wk</Fragment>
+<section>
+	<h2 class="section-title">{info.shortName} - ({symbol})</h2>
+	<p>{info.sectorDisp} - {info.industryDisp}</p>
+	<Tabs>
+		<Fragment slot="tab-1">52Wk</Fragment>
+		<Fragment slot="tab-2">13Wk</Fragment>
+		<Fragment slot="tab-3">1Wk</Fragment>
 
-	<Fragment slot="panel-1">
-		<h2 class="chart-title">{symbol} - 52 Week - Weekly</h2>
-		<Candlestick priceData={JSON.stringify(weeklyData)} />
-	</Fragment>
+		<Fragment slot="panel-1">
+			<h2 class="chart-title">52 Week - Weekly</h2>
+			<Candlestick priceData={JSON.stringify(weeklyData)} />
+		</Fragment>
 
-	<Fragment slot="panel-2">
-		<h2 class="chart-title">{symbol} - 13 Week - Daily</h2>
-		<Candlestick priceData={JSON.stringify(dailyData)} />
-	</Fragment>
+		<Fragment slot="panel-2">
+			<h2 class="chart-title">13 Week - Daily</h2>
+			<Candlestick priceData={JSON.stringify(dailyData)} />
+		</Fragment>
 
-	<Fragment slot="panel-3">
-		<h2 class="chart-title">{symbol} - 1 Week - 30m</h2>
-		<Candlestick priceData={JSON.stringify(intradayData)} />
-	</Fragment>
-</Tabs>
+		<Fragment slot="panel-3">
+			<h2 class="chart-title">1 Week - 30m</h2>
+			<Candlestick priceData={JSON.stringify(intradayData)} />
+		</Fragment>
+	</Tabs>
+</section>
 
 <style lang="scss">
 	@use "../../styles/variables";
+
+	.section-title {
+		margin-bottom: 0;
+		font-size: variables.$font-size-h3;
+	}
 
 	.chart-title {
 		margin-top: variables.$space-flex-32;
