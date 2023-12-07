@@ -103,18 +103,15 @@ const uid = crypto.randomUUID();
 </tabs-module>
 
 <script>
-	import { Subject, Subscription } from "rxjs";
+	import { tabChange$ } from "../../../scripts/observables.ts";
 
 	class TabsModule extends HTMLElement {
 		constructor() {
 			super();
 		}
 
-		// setup a subject to push values into
-		subject = new Subject();
-
 		handleRadioChange = (event) => {
-			this.subject.next(event.target.dataset);
+			tabChange$.next(event.target.dataset);
 		};
 
 		connectedCallback() {
@@ -124,7 +121,8 @@ const uid = crypto.randomUUID();
 				this.radios[i].addEventListener("change", this.handleRadioChange);
 			}
 
-			this.subscription = this.subject.subscribe((value) => {
+			this.subscription = tabChange$.subscribe((value) => {
+				console.log("subscribed from", this.dataset.uid);
 				console.log("subscribed", value);
 			});
 		}
