@@ -27,7 +27,7 @@ const responseDaily = await fetch(
 const dailyData = await responseDaily.json();
 
 const responseIntraday = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=1&interval=30m&date=${endDate}`,
+	`${domain}/api/history?symbol=${symbol}&weeks=2&interval=1h&date=${endDate}`,
 );
 const intradayData = await responseIntraday.json();
 ---
@@ -38,7 +38,7 @@ const intradayData = await responseIntraday.json();
 	<Tabs>
 		<Fragment slot="tab-1">52Wk</Fragment>
 		<Fragment slot="tab-2">13Wk</Fragment>
-		<Fragment slot="tab-3">1Wk</Fragment>
+		<Fragment slot="tab-3">2Wk</Fragment>
 
 		<Fragment slot="panel-1">
 			<h2 class="chart-title">52 Week - Weekly</h2>
@@ -51,7 +51,7 @@ const intradayData = await responseIntraday.json();
 		</Fragment>
 
 		<Fragment slot="panel-3">
-			<h2 class="chart-title">1 Week - 30m</h2>
+			<h2 class="chart-title">2 Week - 60m</h2>
 			<Candlestick priceData={JSON.stringify(intradayData)} />
 		</Fragment>
 	</Tabs>
