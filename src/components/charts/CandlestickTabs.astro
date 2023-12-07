@@ -42,17 +42,17 @@ const intradayData = await responseIntraday.json();
 
 		<Fragment slot="panel-1">
 			<h2 class="chart-title">52 Week - Weekly</h2>
-			<Candlestick priceData={JSON.stringify(weeklyData)} />
+			<Candlestick historicalData={JSON.stringify(weeklyData)} />
 		</Fragment>
 
 		<Fragment slot="panel-2">
 			<h2 class="chart-title">13 Week - Daily</h2>
-			<Candlestick priceData={JSON.stringify(dailyData)} />
+			<Candlestick historicalData={JSON.stringify(dailyData)} />
 		</Fragment>
 
 		<Fragment slot="panel-3">
 			<h2 class="chart-title">2 Week - 60m</h2>
-			<Candlestick priceData={JSON.stringify(intradayData)} />
+			<Candlestick historicalData={JSON.stringify(intradayData)} />
 		</Fragment>
 	</Tabs>
 </section>

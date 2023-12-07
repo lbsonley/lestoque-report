@@ -1,13 +1,13 @@
 ---
 interface Props {
-	priceData: string;
+	historicalData: string;
 }
 
-const { priceData } = Astro.props;
+const { historicalData } = Astro.props;
 ---
 
 <!-- Wrap the component elements in our custom element “candlestick-chart”. -->
-<candlestick-chart data-price-data={priceData}>
+<candlestick-chart data-historical-data={historicalData}>
 	<div class="candlestick-chart__wrapper"></div>
 </candlestick-chart>
 
@@ -23,8 +23,8 @@ const { priceData } = Astro.props;
 
 <script>
 	import { createChart } from "lightweight-charts";
-	import { mapPriceData } from "@utils/map-data.ts";
-	import type { PriceData } from "@utils/map-data.ts";
+	import { mapPriceData, mapVolumeData } from "@utils/map-data.ts";
+	import type { PriceData, VolumeData } from "@utils/map-data.ts";
 
 	// Define the behaviour for our new type of HTML element.
 	class CandlestickChart extends HTMLElement {
@@ -32,7 +32,11 @@ const { priceData } = Astro.props;
 			super();
 
 			const priceData: PriceData = mapPriceData(
-				JSON.parse(this.dataset.priceData!),
+				JSON.parse(this.dataset.historicalData!),
+			);
+
+			const volumeData: VolumeData = mapVolumeData(
+				JSON.parse(this.dataset.historicalData!),
 			);
 
 			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
@@ -53,7 +57,31 @@ const { priceData } = Astro.props;
 				wickUpColor: "#26a69a",
 				wickDownColor: "#ef5350",
 			});
+
+			candlestickSeries.priceScale().applyOptions({
+				scaleMargins: {
+					top: 0.1, // highest point of the series will be 10% away from the top
+					bottom: 0.2, // lowest point will be 20% away from the bottom
+				},
+			});
 			candlestickSeries.setData(priceData);
+
+			const volumeSeries = chart.addHistogramSeries({
+				color: "#26a69a",
+				priceFormat: {
+					type: "volume",
+				},
+				priceScaleId: "", // set as an overlay by setting a blank priceScaleId
+			});
+
+			volumeSeries.priceScale().applyOptions({
+				scaleMargins: {
+					top: 0.8, // highest point of the series will be 80% away from the top
+					bottom: 0,
+				},
+			});
+
+			volumeSeries.setData(volumeData);
 
 			chart.timeScale().fitContent();
 		}
