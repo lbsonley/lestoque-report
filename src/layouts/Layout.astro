@@ -31,10 +31,16 @@ const { metaTitle, metaDescription } = Astro.props;
 
 <style lang="scss">
 	@use "../styles/variables";
+	@use "../styles/mixins";
 
 	.main {
-		max-width: variables.$max-body-width;
-		margin-right: auto;
-		margin-left: auto;
+		margin-right: variables.$space-flex-32;
+		margin-left: variables.$space-flex-32;
+
+		@include mixins.xxl-up {
+			max-width: variables.$max-content-width-medium;
+			margin-right: auto;
+			margin-left: auto;
+		}
 	}
 </style>

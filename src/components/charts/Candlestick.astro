@@ -12,8 +12,10 @@ const { priceData } = Astro.props;
 </candlestick-chart>
 
 <style lang="scss">
+	@use "../../styles/mixins";
+
 	.candlestick-chart__wrapper {
-		width: 60%;
+		width: 100%;
 		aspect-ratio: 16/9;
 		overflow: hidden;
 	}

@@ -1,4 +1,5 @@
 ---
+import Tabs from "@components/widgets/tabs/Tabs.astro";
 import Candlestick from "@components/charts/Candlestick.astro";
 
 interface Props {
@@ -7,30 +8,55 @@ interface Props {
 
 const { symbol } = Astro.props;
 
+const isProd = import.meta.env.PROD;
+
+const domain = isProd
+	? "https://yf-api-ben-sonley-s-team.vercel.app"
+	: "http://localhost:3000";
+
 const responseWeekly = await fetch(
-	`https://yf-api-ben-sonley-s-team.vercel.app/api/history?symbol=${symbol}&weeks=52&interval=1wk`,
+	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk`,
 );
-console.log(responseWeekly);
 const weeklyData = await responseWeekly.json();
 
 const responseDaily = await fetch(
-	`https://yf-api-ben-sonley-s-team.vercel.app/api/history?symbol=${symbol}&weeks=13&interval=1d`,
+	`${domain}/api/history?symbol=${symbol}&weeks=13&interval=1d`,
 );
 const dailyData = await responseDaily.json();
 
 const responseIntraday = await fetch(
-	`https://yf-api-ben-sonley-s-team.vercel.app/api/history?symbol=${symbol}&weeks=1&interval=30m`,
+	`${domain}/api/history?symbol=${symbol}&weeks=1&interval=30m`,
 );
 const intradayData = await responseIntraday.json();
 ---
 
-<div class="candlestick-tabs">
-	<h2>{symbol} - 52 Week - Weekly</h2>
-	<Candlestick priceData={JSON.stringify(weeklyData)} />
+<Tabs>
+	<Fragment slot="tab-1">52Wk</Fragment>
+	<Fragment slot="tab-2">13Wk</Fragment>
+	<Fragment slot="tab-3">1Wk</Fragment>
 
-	<h2>{symbol} - 13 Week - Daily</h2>
-	<Candlestick priceData={JSON.stringify(dailyData)} />
+	<Fragment slot="panel-1">
+		<h2 class="chart-title">{symbol} - 52 Week - Weekly</h2>
+		<Candlestick priceData={JSON.stringify(weeklyData)} />
+	</Fragment>
 
-	<h2>{symbol} - 1 Week - 30m</h2>
-	<Candlestick priceData={JSON.stringify(intradayData)} />
-</div>
+	<Fragment slot="panel-2">
+		<h2 class="chart-title">{symbol} - 13 Week - Daily</h2>
+		<Candlestick priceData={JSON.stringify(dailyData)} />
+	</Fragment>
+
+	<Fragment slot="panel-3">
+		<h2 class="chart-title">{symbol} - 1 Week - 30m</h2>
+		<Candlestick priceData={JSON.stringify(intradayData)} />
+	</Fragment>
+</Tabs>
+
+<style lang="scss">
+	@use "../../styles/variables";
+
+	.chart-title {
+		margin-top: variables.$space-flex-32;
+		margin-bottom: variables.$space-flex-16;
+		font-size: variables.$font-size-h4;
+	}
+</style>

@@ -1,0 +1,143 @@
+---
+import crypto from "node:crypto";
+/* ·········································································· */
+import styles from "./Tabs.module.scss";
+/* —————————————————————————————————————————————————————————————————————————— */
+
+export interface Props {}
+
+const props = Astro.props as Props;
+/* ·········································································· */
+
+const tabs: string[] = [];
+const panels: string[] = [];
+
+let inlineStyles = "";
+
+{
+	let index = 0;
+	const classes: string[] = [];
+	Object.entries(Astro.slots).forEach(([name]) => {
+		if (name.startsWith("tab")) {
+			index += 1;
+
+			tabs.push(name);
+
+			classes.push(
+				String(
+					`.${styles.tabs}:has(.${styles.radio}-${index}:checked) ` +
+						`.${styles.panel}-${index}`,
+				),
+			);
+		} else {
+			panels.push(name);
+		}
+	});
+	inlineStyles += classes.join(",\n");
+}
+inlineStyles +=
+	` {` +
+	//
+	`\n  visibility: visible;\n` +
+	`  height: auto;\n` +
+	`  max-height: none;\n` +
+	`}`;
+
+const uid = crypto.randomUUID();
+---
+
+<tabs-module
+	{...{ ...props, class: undefined, "class:list": undefined }}
+	class:list={[styles.tabs, "tabs", props["class:list"]]}
+	data-uid={uid}
+>
+	<style set:html={inlineStyles}></style>
+
+	<nav class:list={[styles["tab-bar"]]}>
+		{
+			tabs.map(async (name, idx) => {
+				const index = idx + 1;
+				if (name.startsWith("tab")) {
+					const render = await Astro.slots.render(name);
+					return (
+						<div class:list={["tab-wrapper", `tab-${index}`]}>
+							<input
+								class:list={[
+									styles.radio,
+									`${styles.radio}-${index}`,
+									"tab-selector",
+								]}
+								type="radio"
+								name={uid}
+								data-uid={uid}
+								data-tab={name}
+								checked={name.endsWith("active") || index === 1}
+								id={`${uid}-${index}`}
+							/>
+							<label class:list={["tab", styles.tab]} for={`${uid}-${index}`}>
+								<Fragment set:html={render} />
+							</label>
+						</div>
+					);
+				}
+				return null;
+			})
+		}
+	</nav>
+
+	<div class:list={[styles.panels]}>
+		{
+			panels.map(async (name, index) => (
+				<div
+					class:list={[
+						styles.panel,
+						name.endsWith("tallest") ? styles.tallest : "",
+						`${styles.panel}-${index + 1}`,
+						"panel",
+					]}
+					set:html={await Astro.slots.render(name)}
+				/>
+			))
+		}
+	</div>
+</tabs-module>
+
+<script>
+	import { Subject, Subscription } from "rxjs";
+
+	class TabsModule extends HTMLElement {
+		constructor() {
+			super();
+		}
+
+		// setup a subject to push values into
+		subject = new Subject();
+
+		handleRadioChange = (event) => {
+			this.subject.next(event.target.dataset);
+		};
+
+		connectedCallback() {
+			this.radios = this.querySelectorAll(".tab-selector");
+
+			for (let i = 0; i < Array.from(this.radios).length; i++) {
+				this.radios[i].addEventListener("change", this.handleRadioChange);
+			}
+
+			this.subscription = this.subject.subscribe((value) => {
+				console.log("subscribed", value);
+			});
+		}
+
+		disconnectedCallback() {
+			for (let i = 0; i < Array.from(this.radios).length; i++) {
+				this.radios[i].removeEventListener("change", this.handleRadioChange);
+			}
+
+			this.subscription.unsubscribe();
+		}
+	}
+
+	customElements.get("tabs-module") ||
+		customElements.define("tabs-module", TabsModule);
+</script>
