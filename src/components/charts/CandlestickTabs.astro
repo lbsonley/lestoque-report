@@ -11,9 +11,7 @@ const { symbol, endDate } = Astro.props;
 
 const isProd = import.meta.env.PROD;
 
-const domain = isProd
-	? "https://yf-api-ben-sonley-s-team.vercel.app"
-	: "http://localhost:3000";
+const domain = isProd ? "https://yf-api.vercel.app" : "http://localhost:3000";
 
 const responseWeekly = await fetch(
 	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk&date=${endDate}`,
