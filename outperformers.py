@@ -1,3 +1,4 @@
+import argparse
 import warnings
 from pathlib import Path
 import string
@@ -10,8 +11,8 @@ import yfinance as yf
 warnings.filterwarnings("ignore")
 
 
-def get_sp500_return(today, wk52):
-    sp500 = yf.download(tickers=["SPY"], start=wk52, end=today)
+def get_sp500_return(end, wk52):
+    sp500 = yf.download(tickers=["SPY"], start=wk52, end=end)
 
     sp500.index.names = ["date"]
     sp500.columns = sp500.columns.str.lower()
@@ -23,7 +24,7 @@ def get_sp500_return(today, wk52):
     return sp500_52wk
 
 
-def get_outperformers(today, wk52, sp500_52wk):
+def get_outperformers(end, wk52, sp500_52wk):
     constituents = pd.read_html(
         "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
     )[0]
@@ -37,7 +38,7 @@ def get_outperformers(today, wk52, sp500_52wk):
     df_weekly = yf.download(
         tickers=constituents.index.to_list(),
         interval="1wk",
-        end=today,
+        end=end,
         start=wk52,
     ).stack()
 
@@ -117,10 +118,12 @@ def get_outperformers_near_resistance(outperformers, df_weekly):
     return outperformers_at_resistance
 
 
-def make_charts(symbols):
+def make_charts(symbols, date):
     chart_string = ""
     for symbol in symbols:
-        chart_string += f'<CandlestickTabs symbol="{symbol}" />\n\n'
+        chart_string += (
+            f'<CandlestickTabs symbol="{symbol}" endDate="{date}"/>\n\n'
+        )
 
     return chart_string
 
@@ -129,7 +132,7 @@ def make_page(date, symbols):
     publish_date = date.strftime("%Y-%m-%d")
     path_date = date.strftime("%y-%m-%d")
 
-    charts = make_charts(symbols)
+    charts = make_charts(symbols, publish_date)
 
     Path(f"src/content/reports/{publish_date}").mkdir(
         parents=True, exist_ok=True
@@ -146,14 +149,25 @@ def make_page(date, symbols):
         output.write(final_output)
 
 
-today = dt.date.today()
-wk52 = today - dt.timedelta(weeks=52)
+# get cli arguments
+ap = argparse.ArgumentParser()
 
-sp500_52wk = get_sp500_return(today=today, wk52=wk52)
-constituents = get_outperformers(today=today, wk52=wk52, sp500_52wk=sp500_52wk)
+ap.add_argument(
+    "-d", "--date", required=True, help="date must be formatted like YYYY-MM-DD"
+)
+args = vars(ap.parse_args())
+split_args = args["date"].split("-")
+end = dt.date(
+    year=int(split_args[0]), month=int(split_args[1]), day=int(split_args[2])
+)
+
+wk52 = end - dt.timedelta(weeks=52)
+
+sp500_52wk = get_sp500_return(end=end, wk52=wk52)
+constituents = get_outperformers(end=end, wk52=wk52, sp500_52wk=sp500_52wk)
 watchlist = get_outperformers_near_resistance(
     outperformers=constituents["outperformers"],
     df_weekly=constituents["df_weekly"],
 )
 
-make_page(date=today, symbols=watchlist.index.to_list())
+make_page(date=end, symbols=watchlist.index.to_list())

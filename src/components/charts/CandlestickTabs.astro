@@ -4,9 +4,10 @@ import Candlestick from "@components/charts/Candlestick.astro";
 
 interface Props {
 	symbol: string;
+	endDate: string;
 }
 
-const { symbol } = Astro.props;
+const { symbol, endDate } = Astro.props;
 
 const isProd = import.meta.env.PROD;
 
@@ -15,17 +16,17 @@ const domain = isProd
 	: "http://localhost:3000";
 
 const responseWeekly = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk`,
+	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk&date=${endDate}`,
 );
 const weeklyData = await responseWeekly.json();
 
 const responseDaily = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=13&interval=1d`,
+	`${domain}/api/history?symbol=${symbol}&weeks=13&interval=1d&date=${endDate}`,
 );
 const dailyData = await responseDaily.json();
 
 const responseIntraday = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=1&interval=30m`,
+	`${domain}/api/history?symbol=${symbol}&weeks=1&interval=30m&date=${endDate}`,
 );
 const intradayData = await responseIntraday.json();
 ---
