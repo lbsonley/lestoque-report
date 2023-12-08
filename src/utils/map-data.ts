@@ -52,12 +52,6 @@ export const mapAtrData: (data: PriceDataRaw) => StudyData = (data) =>
 		value: atr,
 	}));
 
-export const mapAtrPctData: (data: PriceDataRaw) => StudyData = (data) =>
-	Object.entries(data).map(([time, { atr_pct }]) => ({
-		time: (parseInt(time) / 1000) as Time,
-		value: atr_pct,
-	}));
-
 export const mapSellStopLossData: (data: PriceDataRaw) => StudyData = (data) =>
 	Object.entries(data).map(([time, { sell_stop_loss }]) => ({
 		time: (parseInt(time) / 1000) as Time,

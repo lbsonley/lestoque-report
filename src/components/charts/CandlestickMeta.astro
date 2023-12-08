@@ -7,7 +7,6 @@ import type {
 import {
 	mapPriceData,
 	mapAtrData,
-	mapAtrPctData,
 	mapBuyStopLossData,
 	mapSellStopLossData,
 } from "../../utils/map-data.ts";
@@ -20,7 +19,6 @@ const { historicalData, label } = Astro.props;
 
 const priceData: PriceData = mapPriceData(historicalData);
 const atrData: StudyData = mapAtrData(historicalData);
-const atrPctData: StudyData = mapAtrPctData(historicalData);
 const sellStopData: StudyData = mapSellStopLossData(historicalData);
 const buyStopData: StudyData = mapBuyStopLossData(historicalData);
 
@@ -33,10 +31,6 @@ const changePct = Math.round((change + Number.EPSILON) * 100) / 100;
 
 const atrRounded =
 	Math.round((atrData[atrData.length - 1].value + Number.EPSILON) * 100) / 100;
-
-const atrPctRounded =
-	Math.round((atrPctData[atrPctData.length - 1].value + Number.EPSILON) * 100) /
-	100;
 
 const buyStopRounded =
 	Math.round(
@@ -55,7 +49,6 @@ const sellStopRounded =
 			<tr>
 				<th class="candlestick-meta__cell">{label} ∆</th>
 				<th class="candlestick-meta__cell">ATR</th>
-				<th class="candlestick-meta__cell">ATR %</th>
 				<th class="candlestick-meta__cell">Buy Stop</th>
 				<th class="candlestick-meta__cell">Sell Stop</th>
 			</tr>
@@ -64,7 +57,6 @@ const sellStopRounded =
 			<tr>
 				<td class="candlestick-meta__cell">{`${changePct}%`}</td>
 				<td class="candlestick-meta__cell">{atrRounded}</td>
-				<td class="candlestick-meta__cell">{atrPctRounded}</td>
 				<td class="candlestick-meta__cell">{buyStopRounded}</td>
 				<td class="candlestick-meta__cell">{sellStopRounded}</td>
 			</tr>
