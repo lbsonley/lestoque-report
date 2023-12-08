@@ -1,6 +1,7 @@
 ---
 import Tabs from "@components/widgets/tabs/Tabs.astro";
 import Candlestick from "@components/charts/Candlestick.astro";
+import CandlestickMeta from "@components/charts/CandlestickMeta.astro";
 
 interface Props {
 	symbol: string;
@@ -42,16 +43,19 @@ const intradayData = await responseIntraday.json();
 
 		<Fragment slot="panel-1">
 			<h2 class="chart-title">52 Week - Weekly</h2>
+			<CandlestickMeta historicalData={weeklyData} label="52 Week" />
 			<Candlestick historicalData={JSON.stringify(weeklyData)} />
 		</Fragment>
 
 		<Fragment slot="panel-2">
 			<h2 class="chart-title">13 Week - Daily</h2>
+			<CandlestickMeta historicalData={dailyData} label="13 Week" />
 			<Candlestick historicalData={JSON.stringify(dailyData)} />
 		</Fragment>
 
 		<Fragment slot="panel-3">
 			<h2 class="chart-title">2 Week - 60m</h2>
+			<CandlestickMeta historicalData={intradayData} label="2 Day" />
 			<Candlestick historicalData={JSON.stringify(intradayData)} />
 		</Fragment>
 	</Tabs>

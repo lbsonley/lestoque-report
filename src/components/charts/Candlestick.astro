@@ -24,7 +24,7 @@ const { historicalData } = Astro.props;
 <script>
 	import { createChart } from "lightweight-charts";
 	import { mapPriceData, mapVolumeData } from "@utils/map-data.ts";
-	import type { PriceData, VolumeData } from "@utils/map-data.ts";
+	import type { PriceData, StudyData } from "@utils/map-data.ts";
 
 	// Define the behaviour for our new type of HTML element.
 	class CandlestickChart extends HTMLElement {
@@ -35,7 +35,7 @@ const { historicalData } = Astro.props;
 				JSON.parse(this.dataset.historicalData!),
 			);
 
-			const volumeData: VolumeData = mapVolumeData(
+			const volumeData: StudyData = mapVolumeData(
 				JSON.parse(this.dataset.historicalData!),
 			);
 

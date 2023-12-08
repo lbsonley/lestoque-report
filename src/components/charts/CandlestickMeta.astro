@@ -1,0 +1,99 @@
+---
+import type {
+	PriceDataRaw,
+	PriceData,
+	StudyData,
+} from "../../utils/map-data.ts";
+import {
+	mapPriceData,
+	mapAtrData,
+	mapAtrPctData,
+	mapBuyStopLossData,
+	mapSellStopLossData,
+} from "../../utils/map-data.ts";
+interface Props {
+	historicalData: PriceDataRaw;
+	label: string;
+}
+
+const { historicalData, label } = Astro.props;
+
+const priceData: PriceData = mapPriceData(historicalData);
+const atrData: StudyData = mapAtrData(historicalData);
+const atrPctData: StudyData = mapAtrPctData(historicalData);
+const sellStopData: StudyData = mapSellStopLossData(historicalData);
+const buyStopData: StudyData = mapBuyStopLossData(historicalData);
+
+const change =
+	((priceData[priceData.length - 1].close - priceData[0].close) /
+		priceData[0].close) *
+	100;
+
+const changePct = Math.round((change + Number.EPSILON) * 100) / 100;
+
+const atrRounded =
+	Math.round((atrData[atrData.length - 1].value + Number.EPSILON) * 100) / 100;
+
+const atrPctRounded =
+	Math.round((atrPctData[atrPctData.length - 1].value + Number.EPSILON) * 100) /
+	100;
+
+const buyStopRounded =
+	Math.round(
+		(buyStopData[buyStopData.length - 1].value + Number.EPSILON) * 100,
+	) / 100;
+
+const sellStopRounded =
+	Math.round(
+		(sellStopData[sellStopData.length - 1].value + Number.EPSILON) * 100,
+	) / 100;
+---
+
+<div class="candlestick-meta">
+	<table class="candlestick-meta__table">
+		<thead class="candlestick-meta__head">
+			<tr>
+				<th class="candlestick-meta__cell">{label} ∆</th>
+				<th class="candlestick-meta__cell">ATR</th>
+				<th class="candlestick-meta__cell">ATR %</th>
+				<th class="candlestick-meta__cell">Buy Stop</th>
+				<th class="candlestick-meta__cell">Sell Stop</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="candlestick-meta__cell">{`${changePct}%`}</td>
+				<td class="candlestick-meta__cell">{atrRounded}</td>
+				<td class="candlestick-meta__cell">{atrPctRounded}</td>
+				<td class="candlestick-meta__cell">{buyStopRounded}</td>
+				<td class="candlestick-meta__cell">{sellStopRounded}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<style lang="scss">
+	@use "../../styles/variables";
+
+	.candlestick-meta {
+		margin-bottom: variables.$space-flex-16;
+	}
+
+	.candlestick-meta__table {
+		border-collapse: collapse;
+	}
+
+	.candlestick-meta__cell {
+		padding: variables.$space-12 variables.$space-16;
+		border-top: 1px solid variables.$color-gray-300;
+		border-bottom: 1px solid variables.$color-gray-300;
+
+		&:first-child {
+			border-left: 1px solid variables.$color-gray-300;
+		}
+
+		&:last-child {
+			border-right: 1px solid variables.$color-gray-300;
+		}
+	}
+</style>
