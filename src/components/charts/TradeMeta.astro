@@ -1,0 +1,72 @@
+---
+interface Props {
+	frontmatter: {
+		title: string;
+		entryDate: Date;
+		entryPrice: number;
+		shares: number;
+		initialStopLoss: number;
+	};
+}
+
+const {
+	frontmatter: { title, entryDate, entryPrice, shares, initialStopLoss },
+} = Astro.props;
+
+let risk = (entryPrice - initialStopLoss) * shares;
+risk = Math.round((risk + Number.EPSILON) * 100) / 100;
+---
+
+<div class="candlestick-meta">
+	<h2>{title}</h2>
+	<table class="candlestick-meta__table">
+		<tbody>
+			<tr>
+				<td class="candlestick-meta__cell">Entry Date</td>
+				<td class="candlestick-meta__cell">{entryDate}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Entry Price</td>
+				<td class="candlestick-meta__cell">{entryPrice}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Shares</td>
+				<td class="candlestick-meta__cell">{shares}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Initial Stop</td>
+				<td class="candlestick-meta__cell">{initialStopLoss}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Risk $</td>
+				<td class="candlestick-meta__cell">{risk}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<style lang="scss">
+	@use "../../styles/variables";
+
+	.candlestick-meta {
+		margin-bottom: variables.$space-flex-16;
+	}
+
+	.candlestick-meta__table {
+		border-collapse: collapse;
+	}
+
+	.candlestick-meta__cell {
+		padding: variables.$space-12 variables.$space-16;
+		border-top: 1px solid variables.$color-gray-300;
+		border-bottom: 1px solid variables.$color-gray-300;
+
+		&:first-child {
+			border-left: 1px solid variables.$color-gray-300;
+		}
+
+		&:last-child {
+			border-right: 1px solid variables.$color-gray-300;
+		}
+	}
+</style>

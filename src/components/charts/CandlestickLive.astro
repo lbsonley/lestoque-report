@@ -5,10 +5,13 @@ interface Props {
 	weeks: "2" | "13" | "52";
 	endDate: string;
 }
+
+const { weeks, interval } = Astro.props;
 ---
 
 <!-- Wrap the component elements in our custom element “candlestick-chart”. -->
 <candlestick-chart-live data-props={JSON.stringify(Astro.props)}>
+	<h3>{weeks} Weeks - {interval}</h3>
 	<div class="candlestick-chart__wrapper"></div>
 </candlestick-chart-live>
 

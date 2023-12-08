@@ -2,12 +2,12 @@
 title: Long Lennar Corp. (LEN)
 entryDate: 2023-12-07
 entryPrice: 136.36
-initialStopLoss: 126.00
+initialStopLoss: 134.98
 shares: 25
 ---
 
+import TradeMeta from "../../../components/charts/TradeMeta.astro";
 import CandlestickLive from "../../../components/charts/CandlestickLive.astro";
 
-### 2 Weeks - 60m
-
+<TradeMeta frontmatter={frontmatter} />
 <CandlestickLive symbol="LEN" weeks="2" interval="60m" />
