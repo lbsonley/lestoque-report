@@ -16,5 +16,52 @@ const { Content } = await entry.render();
 ---
 
 <Layout metaTitle={entry.data.title} metaDescription="Trade Summary">
+	<h2>{entry.data.title}</h2>
+	<table class="candlestick-meta__table">
+		<tbody>
+			<tr>
+				<td class="candlestick-meta__cell">Entry Date</td>
+				<td class="candlestick-meta__cell">{entry.data.entryDate}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Entry Price</td>
+				<td class="candlestick-meta__cell">{entry.data.entryPrice}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Shares</td>
+				<td class="candlestick-meta__cell">{entry.data.shares}</td>
+			</tr>
+			<tr>
+				<td class="candlestick-meta__cell">Initial Stop</td>
+				<td class="candlestick-meta__cell">{entry.data.initialStopLoss}</td>
+			</tr>
+		</tbody>
+	</table>
 	<Content />
 </Layout>
+
+<style lang="scss">
+	@use "../../styles/variables";
+
+	.candlestick-meta {
+		margin-bottom: variables.$space-flex-16;
+	}
+
+	.candlestick-meta__table {
+		border-collapse: collapse;
+	}
+
+	.candlestick-meta__cell {
+		padding: variables.$space-12 variables.$space-16;
+		border-top: 1px solid variables.$color-gray-300;
+		border-bottom: 1px solid variables.$color-gray-300;
+
+		&:first-child {
+			border-left: 1px solid variables.$color-gray-300;
+		}
+
+		&:last-child {
+			border-right: 1px solid variables.$color-gray-300;
+		}
+	}
+</style>

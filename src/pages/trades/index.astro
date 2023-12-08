@@ -14,7 +14,7 @@ for (const report of allReports) {
 	} = report;
 	const entryDateStr = entryDate.toISOString().split("T")[0];
 	reportMap[entryDateStr] = reportMap[entryDateStr] || [];
-	reportMap[entryDateStr].push({ title, href: `trades/${slug}` });
+	reportMap[entryDateStr].push({ title, href: `${slug}` });
 }
 
 const sortedMap: ReportMap = Object.keys(reportMap)
