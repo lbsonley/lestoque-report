@@ -7,16 +7,26 @@ const reportsCollection = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		pubDate: z.date(),
-		// description: z.string(),
 		author: z.string(),
-		// image: z.object({
-		// 	url: z.string(),
-		// 	alt: z.string(),
-		// }),
 		tags: z.array(z.string()),
 	}),
 });
+
+const tradesCollection = defineCollection({
+	type: "content",
+	schema: z.object({
+		title: z.string(),
+		entryDate: z.date(),
+		entryPrice: z.number(),
+		initialStopLoss: z.number(),
+		shares: z.number(),
+		exitDate: z.date().optional(),
+		exitPrice: z.number().optional(),
+	}),
+});
+
 // Export a single `collections` object to register your collection(s)
 export const collections = {
 	reports: reportsCollection,
+	trades: tradesCollection,
 };

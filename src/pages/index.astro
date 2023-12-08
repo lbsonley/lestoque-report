@@ -1,27 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
-import ReportList from "~/components/global/ReportList.astro";
-import type { ReportMap } from "@components/global/ReportList.astro";
-
-const allReports = await getCollection("reports");
-
-const reportMap: ReportMap = {};
-for (const report of allReports) {
-	const {
-		data: { pubDate, title },
-		slug,
-	} = report;
-	const pubDateStr = pubDate.toISOString().split("T")[0];
-	reportMap[pubDateStr] = reportMap[pubDateStr] || [];
-	reportMap[pubDateStr].push({ title, href: `reports/${slug}` });
-}
 ---
 
 <Layout
 	metaTitle="Home | Lestoque Report"
 	metaDescription="Technical Analysis of Stocks, ETF's and Cryptocurrency."
 >
-	<h2>Reports</h2>
-	<ReportList reportMap={reportMap} />
+	<h2>Technical Analysis and Trading Strategy</h2>
+	<p>
+		Reports published daily with charts for stocks in the S&P 500 about the
+		move.
+	</p>
 </Layout>

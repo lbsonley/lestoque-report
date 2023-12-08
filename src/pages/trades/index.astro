@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import ReportList from "~/components/global/ReportList.astro";
+import type { ReportMap } from "@components/global/ReportList.astro";
+
+const allReports = await getCollection("trades");
+
+const reportMap: ReportMap = {};
+for (const report of allReports) {
+	const {
+		data: { entryDate, title },
+		slug,
+	} = report;
+	const entryDateStr = entryDate.toISOString().split("T")[0];
+	reportMap[entryDateStr] = reportMap[entryDateStr] || [];
+	reportMap[entryDateStr].push({ title, href: `trades/${slug}` });
+}
+
+const sortedMap: ReportMap = Object.keys(reportMap)
+	.sort()
+	.reverse()
+	.reduce((obj, key) => {
+		obj[key] = reportMap[key];
+		return obj;
+	}, {} as ReportMap);
+---
+
+<Layout metaTitle="Trades | Lestoque Report" metaDescription="Trades">
+	<h2>Trades</h2>
+	<ReportList reportMap={sortedMap} />
+</Layout>
