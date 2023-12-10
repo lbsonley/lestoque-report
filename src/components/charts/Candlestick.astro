@@ -28,8 +28,8 @@ const { historicalData } = Astro.props;
 
 	// Define the behaviour for our new type of HTML element.
 	class CandlestickChart extends HTMLElement {
-		constructor() {
-			super();
+		connectedCallback() {
+			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
 
 			const priceData: PriceData = mapPriceData(
 				JSON.parse(this.dataset.historicalData!),
@@ -39,7 +39,6 @@ const { historicalData } = Astro.props;
 				JSON.parse(this.dataset.historicalData!),
 			);
 
-			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
 			const { chart, candlestickSeries, volumeSeries } = useChart(
 				chartWrapper as string | HTMLElement,
 			);
