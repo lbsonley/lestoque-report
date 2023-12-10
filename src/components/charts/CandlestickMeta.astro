@@ -1,10 +1,8 @@
 ---
-import type {
-	PriceDataRaw,
-	PriceData,
-	StudyData,
-} from "../../utils/map-data.ts";
-import { mapPriceData, mapAtrData } from "../../utils/map-data.ts";
+import type { PriceDataRaw, PriceData, StudyData } from "@utils/map-data.ts";
+import { mapPriceData, mapAtrData } from "@utils/map-data.ts";
+import { round } from "@utils/format";
+
 interface Props {
 	historicalData: PriceDataRaw;
 	label: string;
@@ -20,10 +18,9 @@ const change =
 		priceData[0].close) *
 	100;
 
-const changeRounded = Math.round((change + Number.EPSILON) * 100) / 100;
+const changeRounded = round(change);
 
-const atrRounded =
-	Math.round((atrData[atrData.length - 1].value + Number.EPSILON) * 100) / 100;
+const atrRounded = round(atrData[atrData.length - 1].value);
 ---
 
 <div class="candlestick-meta">

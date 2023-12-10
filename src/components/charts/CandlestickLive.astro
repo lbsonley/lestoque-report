@@ -29,6 +29,7 @@ const { weeks, interval } = Astro.props;
 	import { createChart } from "lightweight-charts";
 	import { mapPriceData, mapVolumeData } from "@utils/map-data.ts";
 	import type { PriceData, StudyData } from "@utils/map-data.ts";
+	import { formatDate } from "@utils/format";
 
 	// Define the behaviour for our new type of HTML element.
 	class CandlestickChartLive extends HTMLElement {
@@ -41,18 +42,11 @@ const { weeks, interval } = Astro.props;
 			return data;
 		}
 
-		formatDate(date: Date): string {
-			const formattedDay =
-				`${date.getDate()}`.length < 2 ? `0${date.getDate()}` : date.getDate();
-
-			return `${date.getFullYear()}-${date.getMonth() + 1}-${formattedDay}`;
-		}
-
 		async connectedCallback() {
 			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
 			const { symbol, interval, weeks } = JSON.parse(this.dataset.props!);
 			const date = new Date();
-			const dateString = this.formatDate(date);
+			const dateString = formatDate(date);
 
 			const domain = this.isProd
 				? "https://yf-api.vercel.app"
