@@ -1,0 +1,103 @@
+---
+interface Props {
+	symbol: string;
+	interval: "60m" | "1d" | "1wk";
+	weeks: "2" | "13" | "52";
+	endDate: string;
+}
+
+const { weeks, interval } = Astro.props;
+---
+
+<!-- Wrap the component elements in our custom element “candlestick-chart”. -->
+<candlestick-chart-watchlist data-props={JSON.stringify(Astro.props)}>
+	<h3>{weeks} Weeks - {interval}</h3>
+	<div class="candlestick-chart__wrapper"></div>
+</candlestick-chart-watchlist>
+
+<style lang="scss">
+	@use "../../styles/mixins";
+
+	.candlestick-chart__wrapper {
+		width: 100%;
+		aspect-ratio: 16/9;
+		overflow: hidden;
+	}
+</style>
+
+<script>
+	import { useChart } from "@utils/chart";
+	import { mapPriceData, mapVolumeData } from "@utils/map-data.ts";
+	import type { PriceData, StudyData } from "@utils/map-data.ts";
+	import { formatDate } from "@utils/format";
+	import { symbolChange$ } from "~/scripts/observables";
+
+	// Define the behaviour for our new type of HTML element.
+	class CandlestickChartWatchlist extends HTMLElement {
+		chartWrapper: HTMLElement | null = null;
+		isProd = import.meta.env.PROD;
+
+		buildUrl(symbol, interval, weeks, dateString) {
+			const domain = this.isProd
+				? "https://yf-api.vercel.app"
+				: "http://localhost:3000";
+
+			return `${domain}/api/history?symbol=${symbol}&interval=${interval}&weeks=${weeks}&date=${dateString}`;
+		}
+
+		async fetchHistory(url: string) {
+			const response = await fetch(url);
+			const data = await response.json();
+			return data;
+		}
+
+		async connectedCallback() {
+			const chartWrapper = this.querySelector(".candlestick-chart__wrapper");
+			const { symbol, interval, weeks } = JSON.parse(this.dataset.props!);
+			const date = new Date();
+			const dateString = formatDate(date);
+
+			const { chart, candlestickSeries, volumeSeries } = useChart(
+				chartWrapper as string | HTMLElement,
+				symbol,
+			);
+
+			const url = this.buildUrl(symbol, interval, weeks, dateString);
+
+			const history = await this.fetchHistory(url);
+
+			const priceData: PriceData = mapPriceData(history);
+
+			const volumeData: StudyData = mapVolumeData(history);
+
+			candlestickSeries.setData(priceData);
+			volumeSeries.setData(volumeData);
+			chart.timeScale().fitContent();
+
+			symbolChange$.subscribe(async (newSymbol) => {
+				const url = this.buildUrl(newSymbol, interval, weeks, dateString);
+
+				const history = await this.fetchHistory(url);
+
+				const priceData: PriceData = mapPriceData(history);
+
+				const volumeData: StudyData = mapVolumeData(history);
+
+				chart.applyOptions({
+					watermark: {
+						text: `${newSymbol}`,
+					},
+				});
+
+				candlestickSeries.setData(priceData);
+				volumeSeries.setData(volumeData);
+				chart.timeScale().fitContent();
+			});
+		}
+	}
+
+	customElements.define(
+		"candlestick-chart-watchlist",
+		CandlestickChartWatchlist,
+	);
+</script>

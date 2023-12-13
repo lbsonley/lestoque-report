@@ -1,0 +1,67 @@
+---
+import Header from "@components/global/Header.astro";
+import Footer from "@components/global/Footer.astro";
+import "../styles/main.scss";
+
+interface Props {
+	metaTitle: string;
+	metaDescription: string;
+}
+
+const { metaTitle, metaDescription } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={metaDescription} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{metaTitle}</title>
+	</head>
+	<body>
+		<div class="watchlist">
+			<Header title="Lestoque Report" />
+			<aside class="watchlist__list-pane">
+				<slot name="sidebar" />
+			</aside>
+			<main class="watchlist__chart-pane">
+				<slot name="main" />
+			</main>
+			<Footer />
+		</div>
+	</body>
+</html>
+
+<style lang="scss">
+	@use "../styles/variables";
+	@use "../styles/mixins";
+
+	.watchlist {
+		display: grid;
+		position: relative;
+		grid-template-columns: 300px 1fr;
+		grid-template-rows: 60px 1fr 40px;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+	}
+
+	.watchlist__list-pane {
+		position: relative;
+		grid-column: 1 / 2;
+		height: 100%;
+		max-height: calc(100vw - 100px);
+		overflow: hidden;
+	}
+
+	.watchlist__chart-pane {
+		position: relative;
+		grid-column: 2 / 3;
+		height: 100%;
+		max-height: calc(100vw - 100px);
+		overflow: hidden;
+	}
+</style>

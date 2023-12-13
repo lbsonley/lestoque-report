@@ -1,6 +1,10 @@
 import { createChart } from "lightweight-charts";
 
-export const useChart = (wrapper: string | HTMLElement) => {
+export const useChart = (
+	wrapper: string | HTMLElement,
+	symbol: string,
+	interval: string,
+) => {
 	const chart = createChart(wrapper as string | HTMLElement, {
 		autoSize: true,
 		handleScale: false,
@@ -8,6 +12,18 @@ export const useChart = (wrapper: string | HTMLElement) => {
 		timeScale: {
 			rightOffset: 3,
 			timeVisible: true,
+		},
+	});
+
+	chart.applyOptions({
+		watermark: {
+			visible: true,
+			fontSize: 192,
+			fontStyle: "bold",
+			horzAlign: "center",
+			vertAlign: "center",
+			color: "rgba(89, 124, 164, 0.2)",
+			text: `${symbol}`,
 		},
 	});
 

@@ -1,5 +1,5 @@
 import { Subject } from "rxjs";
 
-const tabChange$ = new Subject();
+export const tabChange$ = new Subject();
 
-export { tabChange$ };
+export const symbolChange$ = new Subject();

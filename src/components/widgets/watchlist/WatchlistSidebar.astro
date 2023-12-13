@@ -1,0 +1,94 @@
+---
+interface Props {
+	securities: Array<{
+		symbol: string;
+		name: string;
+		sector: string;
+		subIndustry: string;
+	}>;
+}
+
+const { securities } = Astro.props;
+---
+
+<watchlist-sidebar>
+	<nav class="watchlist__pane">
+		<ul class="watchlist__list">
+			{
+				securities.map(({ symbol, name, sector, subIndustry }) => (
+					<li class="watchlist__item">
+						<button
+							type="button"
+							class="watchlist__symbol"
+							data-symbol={symbol}
+						>
+							<span>
+								{name} ({symbol})
+							</span>
+							<span>
+								{sector} - {subIndustry}
+							</span>
+						</button>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+</watchlist-sidebar>
+
+<script>
+	import { symbolChange$ } from "~/scripts/observables";
+
+	class WatchlistSidebar extends HTMLElement {
+		symbolButtons: NodeList | null = null;
+
+		handleSymbolClick = (event: Event) => {
+			if (event.target && event.target instanceof HTMLElement) {
+				console.log(event.target.dataset.symbol);
+				symbolChange$.next(event.target.dataset.symbol);
+			}
+		};
+
+		connectedCallback() {
+			this.symbolButtons = this.querySelectorAll(".watchlist__symbol");
+
+			for (const button of Array.from(this.symbolButtons)) {
+				button.addEventListener("click", this.handleSymbolClick);
+			}
+		}
+
+		disconnectedCallback() {
+			for (const button of Array.from(this.symbolButtons!)) {
+				button.removeEventListener("click", this.handleSymbolClick);
+			}
+		}
+	}
+
+	customElements.define("watchlist-sidebar", WatchlistSidebar);
+</script>
+
+<style lang="scss">
+	@use "../../../styles/variables";
+
+	.watchlist__list {
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: stretch;
+	}
+
+	.watchlist__item {
+		list-style: none;
+	}
+
+	.watchlist__symbol {
+		display: flex;
+		flex-flow: column nowrap;
+		width: 100%;
+		padding: variables.$space-24 variables.$space-16;
+		border: 1px solid variables.$color-blue-900;
+
+		span {
+			pointer-events: none;
+		}
+	}
+</style>

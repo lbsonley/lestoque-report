@@ -1,0 +1,46 @@
+---
+import LWatchlist from "~/layouts/LWatchlist.astro";
+import WatchlistSidebar from "@components/widgets/watchlist/WatchlistSidebar.astro";
+import WatchlistChart from "@components/widgets/watchlist/WatchlistChart.astro";
+
+const securities = [
+	{
+		symbol: "NVDA",
+		name: "NVIDIA",
+		sector: "Information Technology",
+		subIndustry: "Semiconductors",
+	},
+	{
+		symbol: "AMD",
+		name: "AMD",
+		sector: "Information Technology",
+		subIndustry: "Semiconductors",
+	},
+	{
+		symbol: "META",
+		name: "META",
+		sector: "Communication Services",
+		subIndustry: "Semiconductors",
+	},
+	{
+		symbol: "FDX",
+		name: "FEDEX",
+		sector: "Industrials",
+		subIndustry: "Transportation",
+	},
+	{
+		symbol: "LLY",
+		name: "Eli Lilly",
+		sector: "Health Care",
+		subIndustry: "Pharmaceuticals",
+	},
+];
+---
+
+<LWatchlist
+	metaTitle="Watchlist | Lestoque Report"
+	metaDescription="Stocks to trade."
+>
+	<WatchlistSidebar slot="sidebar" securities={securities} />
+	<WatchlistChart slot="main" securities={securities} />
+</LWatchlist>
