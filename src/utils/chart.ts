@@ -1,14 +1,10 @@
 import { createChart } from "lightweight-charts";
 
-export const useChart = (
-	wrapper: string | HTMLElement,
-	symbol: string,
-	interval: string,
-) => {
+export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 	const chart = createChart(wrapper as string | HTMLElement, {
 		autoSize: true,
-		handleScale: false,
-		handleScroll: false,
+		handleScale: true,
+		handleScroll: true,
 		timeScale: {
 			rightOffset: 3,
 			timeVisible: true,

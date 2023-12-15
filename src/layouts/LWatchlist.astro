@@ -54,12 +54,13 @@ const { metaTitle, metaDescription } = Astro.props;
 		grid-column: 1 / 2;
 		height: 100%;
 		max-height: calc(100vw - 100px);
-		overflow: hidden;
+		overflow: scroll;
 	}
 
 	.watchlist__chart-pane {
 		position: relative;
 		grid-column: 2 / 3;
+		max-width: variables.$max-content-width-wide;
 		height: 100%;
 		max-height: calc(100vw - 100px);
 		overflow: hidden;

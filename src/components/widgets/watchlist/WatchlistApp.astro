@@ -1,0 +1,59 @@
+---
+import LWatchlist from "~/layouts/LWatchlist.astro";
+---
+
+<watchlist-app>
+	<LWatchlist
+		metaTitle="Watchlist | Lestoque Report"
+		metaDescription="Stocks to trade."
+	>
+		<watchlist-sidebar slot="sidebar"></watchlist-sidebar>
+		<watchlist-chart slot="main"></watchlist-chart>
+	</LWatchlist>
+</watchlist-app>
+
+<script>
+	import "./watchlist-sidebar";
+	import "./watchlist-chart";
+	import state from "@state/watchlist-state";
+
+	class WatchlistApp extends HTMLElement {
+		sidebarEl: HTMLElement | null = null;
+		chartEl: HTMLElement | null = null;
+		securities: any[] = [];
+
+		async fetchOutperformers() {
+			const request = await fetch("http://localhost:3000/api/outperformers");
+			const response = await request.json();
+			return response;
+		}
+
+		setSymbol = () => {
+			const urlParams = new URLSearchParams(location.search);
+			if (urlParams.has("symbol")) {
+				this.chartEl.setAttribute("symbol", urlParams.get("symbol"));
+			} else {
+				this.chartEl.setAttribute("symbol", this.securities[0].symbol);
+			}
+		};
+
+		async connectedCallback() {
+			this.sidebarEl = this.querySelector("watchlist-sidebar");
+			this.chartEl = this.querySelector("watchlist-chart");
+
+			this.securities = await this.fetchOutperformers();
+
+			this.sidebarEl.setAttribute(
+				"securities",
+				JSON.stringify(this.securities),
+			);
+			this.setSymbol();
+
+			state.selectedSymbol$.subscribe(() => {
+				this.setSymbol();
+			});
+		}
+	}
+
+	customElements.define("watchlist-app", WatchlistApp);
+</script>
