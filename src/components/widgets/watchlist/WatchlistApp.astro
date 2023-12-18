@@ -16,14 +16,19 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 	import "./watchlist-sidebar";
 	import "./watchlist-chart";
 	import state from "@state/watchlist-state";
+	import { formatDate } from "@utils/format";
 
 	class WatchlistApp extends HTMLElement {
 		sidebarEl: HTMLElement | null = null;
 		chartEl: HTMLElement | null = null;
 		securities: any[] = [];
+		endDate: string = formatDate(new Date());
+		weeks: string = "52";
 
 		async fetchOutperformers() {
-			const request = await fetch("http://localhost:3000/api/outperformers");
+			const request = await fetch(
+				`http://localhost:3000/api/outperformers?end=${this.endDate}&weeks=${this.weeks}`,
+			);
 			const response = await request.json();
 			return response;
 		}
