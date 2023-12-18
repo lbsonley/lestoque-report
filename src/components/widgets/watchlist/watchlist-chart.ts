@@ -19,18 +19,19 @@ class WatchlistChart extends HTMLElement {
 	chartInstance: any;
 	isProd = import.meta.env.PROD;
 	symbol: string | null = null;
-	interval: string | null = "1wk";
-	weeks: string | null = "52";
+	interval: string | null = null;
+	weeks: string | null = null;
 	updateCount = 0;
+	debounceTimeout: number | null = null;
 
-	static observedAttributes = ["symbol"];
+	static observedAttributes = ["symbol", "interval", "weeks"];
 
-	buildUrl(symbol, interval, weeks, dateString) {
+	buildUrl(dateString: string) {
 		const domain = this.isProd
 			? "https://yf-api.vercel.app"
 			: "http://localhost:3000";
 
-		return `${domain}/api/history?symbol=${symbol}&interval=${interval}&weeks=${weeks}&end=${dateString}`;
+		return `${domain}/api/history?symbol=${this.symbol}&interval=${this.interval}&weeks=${this.weeks}&end=${dateString}`;
 	}
 
 	async fetchHistory(url: string) {
@@ -60,12 +61,7 @@ class WatchlistChart extends HTMLElement {
 		this.updateCount += 1;
 		console.log(this.updateCount);
 
-		const url = this.buildUrl(
-			this.symbol,
-			this.interval,
-			this.weeks,
-			dateString,
-		);
+		const url = this.buildUrl(dateString);
 
 		const history = await this.fetchHistory(url);
 
@@ -141,9 +137,15 @@ class WatchlistChart extends HTMLElement {
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-		console.log(name, newValue);
 		this[name] = newValue;
-		this.updateChart();
+
+		if (this.debounceTimeout) {
+			cancelAnimationFrame(this.debounceTimeout);
+		}
+
+		this.debounceTimeout = requestAnimationFrame(() => {
+			this.updateChart();
+		});
 	}
 }
 

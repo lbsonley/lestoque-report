@@ -28,7 +28,15 @@ const { metaTitle, metaDescription } = Astro.props;
 				<slot name="sidebar" />
 			</aside>
 			<main class="watchlist__chart-pane">
-				<slot name="main" />
+				<div class="watchlist__options">
+					<slot name="options" />
+				</div>
+				<div class="watchlist__chart">
+					<slot name="main" />
+				</div>
+				<div class="watchlist__position-sizer">
+					<slot name="position-sizer" />
+				</div>
 			</main>
 			<Footer />
 		</div>
@@ -58,8 +66,10 @@ const { metaTitle, metaDescription } = Astro.props;
 	}
 
 	.watchlist__chart-pane {
+		display: flex;
 		position: relative;
 		grid-column: 2 / 3;
+		flex-direction: column;
 		max-width: variables.$max-content-width-wide;
 		height: 100%;
 		max-height: calc(100vw - 100px);

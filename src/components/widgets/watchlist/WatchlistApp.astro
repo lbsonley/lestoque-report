@@ -8,13 +8,17 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		metaDescription="Stocks to trade."
 	>
 		<watchlist-sidebar slot="sidebar"></watchlist-sidebar>
+		<watchlist-chart-options slot="options"></watchlist-chart-options>
 		<watchlist-chart slot="main"></watchlist-chart>
+		<position-sizer slot="position-sizer"></position-sizer>
 	</LWatchlist>
 </watchlist-app>
 
 <script>
 	import "./watchlist-sidebar";
 	import "./watchlist-chart";
+	import "./watchlist-chart-options";
+	import "./position-sizer";
 	import state from "@state/watchlist-state";
 	import { formatDate } from "@utils/format";
 
@@ -23,7 +27,12 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		chartEl: HTMLElement | null = null;
 		securities: any[] = [];
 		endDate: string = formatDate(new Date());
-		weeks: string = "52";
+		weeksMap = {
+			"90m": "2",
+			"1d": "13",
+			"1wk": "52",
+			"1mo": "260",
+		};
 
 		isProd = import.meta.env.PROD;
 
@@ -33,24 +42,16 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 				: "http://localhost:3000";
 
 			const request = await fetch(
-				`${domain}/api/outperformers?end=${this.endDate}&weeks=${this.weeks}`,
+				`${domain}/api/outperformers?end=${this.endDate}&weeks=52`,
 			);
 			const response = await request.json();
 			return response;
 		}
 
-		setSymbol = () => {
-			const urlParams = new URLSearchParams(location.search);
-			if (urlParams.has("symbol")) {
-				this.chartEl!.setAttribute("symbol", urlParams.get("symbol")!);
-			} else {
-				this.chartEl!.setAttribute("symbol", this.securities[0].symbol);
-			}
-		};
-
 		async connectedCallback() {
 			this.sidebarEl = this.querySelector("watchlist-sidebar");
 			this.chartEl = this.querySelector("watchlist-chart");
+			this.optionsEl = this.querySelector("watchlist-chart-options");
 
 			this.securities = await this.fetchOutperformers();
 
@@ -58,10 +59,13 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 				"securities",
 				JSON.stringify(this.securities),
 			);
-			this.setSymbol();
 
-			state.selectedSymbol$.subscribe(() => {
-				this.setSymbol();
+			state.chartOptions$.subscribe((options) => {
+				options.symbol && this.chartEl!.setAttribute("symbol", options.symbol);
+				if (options.interval) {
+					this.chartEl!.setAttribute("interval", options.interval);
+					this.chartEl!.setAttribute("weeks", this.weeksMap[options.interval]);
+				}
 			});
 		}
 	}

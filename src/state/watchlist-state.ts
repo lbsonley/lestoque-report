@@ -1,5 +1,10 @@
 // https://www.toptal.com/react/rxjs-react-state-management
-import { BehaviorSubject, distinctUntilChanged } from "rxjs";
+import {
+	BehaviorSubject,
+	combineLatest,
+	distinctUntilChanged,
+	map,
+} from "rxjs";
 
 class WatchlistState {
 	private _selectedSymbol$ = new BehaviorSubject("");
@@ -9,6 +14,11 @@ class WatchlistState {
 	selectedSymbol$ = this._selectedSymbol$.pipe(distinctUntilChanged());
 	selectedInterval$ = this._selectedInterval$.pipe(distinctUntilChanged());
 	selectedWeeks$ = this._selectedWeeks$.pipe(distinctUntilChanged());
+
+	chartOptions$ = combineLatest([
+		this.selectedSymbol$,
+		this.selectedInterval$,
+	]).pipe(map(([symbol, interval]) => ({ symbol, interval })));
 
 	updateSymbol(value: string) {
 		this._selectedSymbol$.next(value);
