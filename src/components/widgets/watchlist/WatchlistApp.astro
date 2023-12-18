@@ -36,9 +36,9 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		setSymbol = () => {
 			const urlParams = new URLSearchParams(location.search);
 			if (urlParams.has("symbol")) {
-				this.chartEl.setAttribute("symbol", urlParams.get("symbol"));
+				this.chartEl!.setAttribute("symbol", urlParams.get("symbol")!);
 			} else {
-				this.chartEl.setAttribute("symbol", this.securities[0].symbol);
+				this.chartEl!.setAttribute("symbol", this.securities[0].symbol);
 			}
 		};
 
@@ -48,7 +48,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 
 			this.securities = await this.fetchOutperformers();
 
-			this.sidebarEl.setAttribute(
+			this.sidebarEl!.setAttribute(
 				"securities",
 				JSON.stringify(this.securities),
 			);

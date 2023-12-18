@@ -62,6 +62,7 @@ const { weeks, interval } = Astro.props;
 
 			const { chart, candlestickSeries, volumeSeries } = useChart(
 				chartWrapper as string | HTMLElement,
+				symbol,
 			);
 			candlestickSeries.setData(priceData);
 			volumeSeries.setData(volumeData);
