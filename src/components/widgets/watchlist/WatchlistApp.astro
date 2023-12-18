@@ -25,6 +25,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 	class WatchlistApp extends HTMLElement {
 		sidebarEl: HTMLElement | null = null;
 		chartEl: HTMLElement | null = null;
+		optionsEl: HTMLElement | null = null;
 		securities: any[] = [];
 		endDate: string = formatDate(new Date());
 		weeksMap = {
