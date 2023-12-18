@@ -25,9 +25,15 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		endDate: string = formatDate(new Date());
 		weeks: string = "52";
 
+		isProd = import.meta.env.PROD;
+
 		async fetchOutperformers() {
+			const domain = this.isProd
+				? "https://yf-api.vercel.app"
+				: "http://localhost:3000";
+
 			const request = await fetch(
-				`http://localhost:3000/api/outperformers?end=${this.endDate}&weeks=${this.weeks}`,
+				`${domain}/api/outperformers?end=${this.endDate}&weeks=${this.weeks}`,
 			);
 			const response = await request.json();
 			return response;
