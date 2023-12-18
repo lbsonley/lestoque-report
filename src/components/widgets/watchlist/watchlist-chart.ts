@@ -30,7 +30,7 @@ class WatchlistChart extends HTMLElement {
 			? "https://yf-api.vercel.app"
 			: "http://localhost:3000";
 
-		return `${domain}/api/history?symbol=${symbol}&interval=${interval}&weeks=${weeks}&date=${dateString}`;
+		return `${domain}/api/history?symbol=${symbol}&interval=${interval}&weeks=${weeks}&end=${dateString}`;
 	}
 
 	async fetchHistory(url: string) {

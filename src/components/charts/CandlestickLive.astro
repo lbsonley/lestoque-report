@@ -53,7 +53,7 @@ const { weeks, interval } = Astro.props;
 				: "http://localhost:3000";
 
 			const history = await this.fetchHistory(
-				`${domain}/api/history?symbol=${symbol}&interval=${interval}&weeks=${weeks}&date=${dateString}`,
+				`${domain}/api/history?symbol=${symbol}&interval=${interval}&weeks=${weeks}&end=${dateString}`,
 			);
 
 			const priceData: PriceData = mapPriceData(history);

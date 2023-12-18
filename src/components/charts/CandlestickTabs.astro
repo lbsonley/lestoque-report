@@ -18,17 +18,17 @@ const responseInfo = await fetch(`${domain}/api/info?symbol=${symbol}`);
 const info = await responseInfo.json();
 
 const responseWeekly = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk&date=${endDate}`,
+	`${domain}/api/history?symbol=${symbol}&weeks=52&interval=1wk&end=${endDate}`,
 );
 const weeklyData = await responseWeekly.json();
 
 const responseDaily = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=13&interval=1d&date=${endDate}`,
+	`${domain}/api/history?symbol=${symbol}&weeks=13&interval=1d&end=${endDate}`,
 );
 const dailyData = await responseDaily.json();
 
 const responseIntraday = await fetch(
-	`${domain}/api/history?symbol=${symbol}&weeks=2&interval=1h&date=${endDate}`,
+	`${domain}/api/history?symbol=${symbol}&weeks=2&interval=1h&end=${endDate}`,
 );
 const intradayData = await responseIntraday.json();
 ---
