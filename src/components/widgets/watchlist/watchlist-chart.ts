@@ -1,5 +1,9 @@
 import { useChart } from "@utils/chart";
-import { mapPriceData, mapVolumeData } from "@utils/map-data.ts";
+import {
+	mapPriceData,
+	mapVolumeData,
+	mapCandlestickSignals,
+} from "@utils/map-data.ts";
 import type { PriceData, StudyData } from "@utils/map-data.ts";
 import { formatDate } from "@utils/format";
 
@@ -63,10 +67,11 @@ class WatchlistChart extends HTMLElement {
 
 		const url = this.buildUrl(dateString);
 
-		const history = await this.fetchHistory(url);
+		const { history, candlestickSignals } = await this.fetchHistory(url);
 
 		const priceData: PriceData = mapPriceData(history);
 		const volumeData: StudyData = mapVolumeData(history);
+		// const candlestickMarkers = mapCandlestickSignals(candlestickSignals);
 
 		chart.applyOptions({
 			watermark: {
@@ -77,6 +82,8 @@ class WatchlistChart extends HTMLElement {
 		candlestickSeries.setData(priceData);
 		volumeSeries.setData(volumeData);
 		chart.timeScale().fitContent();
+
+		// candlestickSeries.setMarkers(candlestickMarkers);
 
 		// 	const { high, low, close } = priceData[priceData.length - 1];
 
@@ -132,7 +139,7 @@ class WatchlistChart extends HTMLElement {
 		this.render();
 		this.chartInstance = useChart(
 			this.chartWrapper as string | HTMLElement,
-			this.symbol,
+			this.symbol!,
 		);
 	}
 
