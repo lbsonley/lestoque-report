@@ -17,8 +17,7 @@ const styles = `
 	.watchlist__label {
 		display: flex;
 		flex-flow: column nowrap;
-		width: 100%;
-		max-width: 100%;
+		width: calc(100% - 48px);
 		padding: 24px 16px;
 		border-bottom: 1px solid #141c25;
 	}

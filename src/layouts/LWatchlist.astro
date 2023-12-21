@@ -24,10 +24,10 @@ const { metaTitle, metaDescription } = Astro.props;
 	<body>
 		<div class="watchlist">
 			<Header title="Lestoque Report" />
-			<aside class="watchlist__list-pane">
+			<aside class="watchlist__sidebar-pane">
 				<slot name="sidebar" />
 			</aside>
-			<main class="watchlist__chart-pane">
+			<main class="watchlist__main-pane">
 				<div class="watchlist__options">
 					<slot name="options" />
 				</div>
@@ -57,15 +57,15 @@ const { metaTitle, metaDescription } = Astro.props;
 		overflow: hidden;
 	}
 
-	.watchlist__list-pane {
+	.watchlist__sidebar-pane {
 		position: relative;
 		grid-column: 1 / 2;
 		height: 100%;
 		max-height: calc(100vw - 100px);
-		overflow: scroll;
+		overflow: hidden scroll;
 	}
 
-	.watchlist__chart-pane {
+	.watchlist__main-pane {
 		display: flex;
 		position: relative;
 		grid-column: 2 / 3;
@@ -73,6 +73,12 @@ const { metaTitle, metaDescription } = Astro.props;
 		max-width: variables.$max-content-width-wide;
 		height: 100%;
 		max-height: calc(100vw - 100px);
+		margin: 0 variables.$space-16;
 		overflow: hidden;
+	}
+
+	.watchlist__position-sizer,
+	.watchlist__options {
+		margin: variables.$space-24 0;
 	}
 </style>

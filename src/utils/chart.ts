@@ -24,11 +24,17 @@ export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 	});
 
 	const candlestickSeries = chart.addCandlestickSeries({
-		upColor: "#26a69a",
-		downColor: "#ef5350",
-		borderVisible: false,
-		wickUpColor: "#26a69a",
-		wickDownColor: "#ef5350",
+		upColor: "#fff",
+		downColor: "#000",
+		// upColor: "#26a69a",
+		// downColor: "#ef5350",
+		borderVisible: true,
+		borderColor: "#000",
+		wickUpColor: "#000",
+		wickDownColor: "#000",
+		priceLineColor: "#000",
+		// wickUpColor: "#26a69a",
+		// wickDownColor: "#ef5350",
 	});
 
 	candlestickSeries.priceScale().applyOptions({
@@ -39,7 +45,8 @@ export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 	});
 
 	const volumeSeries = chart.addHistogramSeries({
-		color: "#26a69a",
+		color: "#000",
+		// color: "#26a69a",
 		priceFormat: {
 			type: "volume",
 		},
