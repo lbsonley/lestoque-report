@@ -57,6 +57,8 @@ class WatchlistChart extends HTMLElement {
 
 	async updateChart() {
 		const date = new Date();
+		// push date forward 1 day so we get latest data
+		date.setDate(date.getDate() + 1);
 		const dateString = formatDate(date);
 
 		const { chart, candlestickSeries, volumeSeries } = this.chartInstance;
