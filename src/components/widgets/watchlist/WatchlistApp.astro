@@ -1,8 +1,14 @@
 ---
 import LWatchlist from "~/layouts/LWatchlist.astro";
+
+interface Props {
+	listName: string;
+}
+
+const { listName } = Astro.props;
 ---
 
-<watchlist-app>
+<watchlist-app list-name={listName}>
 	<LWatchlist
 		metaTitle="Watchlist | Lestoque Report"
 		metaDescription="Stocks to trade."
@@ -26,6 +32,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		sidebarEl: HTMLElement | null = null;
 		chartEl: HTMLElement | null = null;
 		optionsEl: HTMLElement | null = null;
+		listName: string | null = null;
 		securities: any[] = [];
 		startDate: Date = new Date();
 		endDate: Date = new Date();
@@ -54,14 +61,16 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 			this.endDate.setDate(this.endDate.getDate() + 1);
 		}
 
+		static observedAttributes = ["list-name"];
+
 		isProd = import.meta.env.PROD;
 
-		async fetchOutperformers() {
+		async fetchList() {
 			const domain = this.isProd
 				? "https://yf-api.vercel.app"
 				: "http://localhost:8000";
 
-			const request = await fetch(`${domain}/api/outperformers`);
+			const request = await fetch(`${domain}/api/${this.listName}`);
 			const response = await request.json();
 			return response.items;
 		}
@@ -71,7 +80,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 			this.chartEl = this.querySelector("watchlist-chart");
 			this.optionsEl = this.querySelector("watchlist-chart-options");
 
-			this.securities = await this.fetchOutperformers();
+			this.securities = await this.fetchList();
 
 			this.sidebarEl!.setAttribute(
 				"securities",
@@ -89,6 +98,14 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 					this.chartEl!.setAttribute("end", formatDate(this.endDate));
 				}
 			});
+		}
+
+		attributeChangedCallback(
+			name: "list-name",
+			oldValue: string,
+			newValue: string,
+		) {
+			this.listName = newValue;
 		}
 	}
 
