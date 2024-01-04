@@ -27,26 +27,43 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		chartEl: HTMLElement | null = null;
 		optionsEl: HTMLElement | null = null;
 		securities: any[] = [];
-		endDate: string = formatDate(new Date());
-		weeksMap = {
-			"90m": "2",
-			"1d": "13",
-			"1wk": "52",
-			"1mo": "260",
+		startDate: Date = new Date();
+		endDate: Date = new Date();
+		startDateMap = {
+			// 2 weeks ago
+			"90m": formatDate(
+				new Date(this.startDate.setDate(this.endDate.getDate() - 7 * 2)),
+			),
+			// 13 weeks ago
+			"1d": formatDate(
+				new Date(this.startDate.setDate(this.endDate.getDate() - 7 * 13)),
+			),
+			// 52 weeks ago
+			"1wk": formatDate(
+				new Date(this.startDate.setDate(this.endDate.getDate() - 7 * 52)),
+			),
+			// 260 weeks (5y) ago
+			"1mo": formatDate(
+				new Date(this.startDate.setDate(this.endDate.getDate() - 7 * 260)),
+			),
 		};
+
+		constructor() {
+			super();
+			// push date one day forward so we get current day prices
+			this.endDate.setDate(this.endDate.getDate() + 1);
+		}
 
 		isProd = import.meta.env.PROD;
 
 		async fetchOutperformers() {
 			const domain = this.isProd
 				? "https://yf-api.vercel.app"
-				: "http://localhost:3000";
+				: "http://localhost:8000";
 
-			const request = await fetch(
-				`${domain}/api/outperformers?end=${this.endDate}&weeks=52`,
-			);
+			const request = await fetch(`${domain}/api/outperformers`);
 			const response = await request.json();
-			return response;
+			return response.items;
 		}
 
 		async connectedCallback() {
@@ -65,7 +82,11 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 				options.symbol && this.chartEl!.setAttribute("symbol", options.symbol);
 				if (options.interval) {
 					this.chartEl!.setAttribute("interval", options.interval);
-					this.chartEl!.setAttribute("weeks", this.weeksMap[options.interval]);
+					this.chartEl!.setAttribute(
+						"start",
+						this.startDateMap[options.interval],
+					);
+					this.chartEl!.setAttribute("end", formatDate(this.endDate));
 				}
 			});
 		}

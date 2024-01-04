@@ -5,7 +5,6 @@ import {
 	mapCandlestickSignals,
 } from "@utils/map-data.ts";
 import type { PriceData, StudyData } from "@utils/map-data.ts";
-import { formatDate } from "@utils/format";
 
 const styles = `
 <style>
@@ -24,18 +23,19 @@ class WatchlistChart extends HTMLElement {
 	isProd = import.meta.env.PROD;
 	symbol: string | null = null;
 	interval: string | null = null;
-	weeks: string | null = null;
+	start: string | null = null;
+	end: string | null = null;
 	updateCount = 0;
 	debounceTimeout: number | null = null;
 
-	static observedAttributes = ["symbol", "interval", "weeks"];
+	static observedAttributes = ["symbol", "interval", "start", "end"];
 
-	buildUrl(dateString: string) {
+	buildUrl() {
 		const domain = this.isProd
 			? "https://yf-api.vercel.app"
-			: "http://localhost:3000";
+			: "http://localhost:8000";
 
-		return `${domain}/api/history?symbol=${this.symbol}&interval=${this.interval}&weeks=${this.weeks}&end=${dateString}`;
+		return `${domain}/api/history?symbol=${this.symbol}&interval=${this.interval}&start=${this.start}&end=${this.end}`;
 	}
 
 	async fetchHistory(url: string) {
@@ -56,24 +56,18 @@ class WatchlistChart extends HTMLElement {
 	}
 
 	async updateChart() {
-		const date = new Date();
-		// push date forward 1 day so we get latest data
-		date.setDate(date.getDate() + 1);
-		const dateString = formatDate(date);
-
 		const { chart, candlestickSeries, volumeSeries } = this.chartInstance;
 
-		// let pline, r1line, r2line, s1line, s2line;
 		this.updateCount += 1;
 		console.log(this.updateCount);
 
-		const url = this.buildUrl(dateString);
+		const url = this.buildUrl();
 
 		const { history, candlestickSignals } = await this.fetchHistory(url);
 
 		const priceData: PriceData = mapPriceData(history);
 		const volumeData: StudyData = mapVolumeData(history);
-		// const candlestickMarkers = mapCandlestickSignals(candlestickSignals);
+		const candlestickMarkers = mapCandlestickSignals(candlestickSignals);
 
 		chart.applyOptions({
 			watermark: {
@@ -85,55 +79,7 @@ class WatchlistChart extends HTMLElement {
 		volumeSeries.setData(volumeData);
 		chart.timeScale().fitContent();
 
-		// candlestickSeries.setMarkers(candlestickMarkers);
-
-		// 	const { high, low, close } = priceData[priceData.length - 1];
-
-		// 	const p = (high + low + close) / 3;
-		// 	const r1 = p * 2 - low;
-		// 	const r2 = p + high - low;
-		// 	const s1 = p * 2 - high;
-		// 	const s2 = p - high + low;
-
-		// 	if (updateCount > 1) {
-		// 		candlestickSeries.removePriceLine(pline);
-		// 		candlestickSeries.removePriceLine(r1line);
-		// 		candlestickSeries.removePriceLine(r2line);
-		// 		candlestickSeries.removePriceLine(s1line);
-		// 		candlestickSeries.removePriceLine(s2line);
-		// 	}
-
-		// 	const priceLineOptions = {
-		// 		color: "#597ca4",
-		// 		lineWidth: 1,
-		// 		lineStyle: 2, // LineStyle.Dashed
-		// 		axisLabelVisible: true,
-		// 	};
-		// 	pline = candlestickSeries.createPriceLine({
-		// 		...priceLineOptions,
-		// 		price: p,
-		// 		title: "p",
-		// 	});
-		// 	r1line = candlestickSeries.createPriceLine({
-		// 		...priceLineOptions,
-		// 		price: r1,
-		// 		title: "r1",
-		// 	});
-		// 	r2line = candlestickSeries.createPriceLine({
-		// 		...priceLineOptions,
-		// 		price: r2,
-		// 		title: "r2",
-		// 	});
-		// 	s1line = candlestickSeries.createPriceLine({
-		// 		...priceLineOptions,
-		// 		price: s1,
-		// 		title: "s1",
-		// 	});
-		// 	s2line = candlestickSeries.createPriceLine({
-		// 		...priceLineOptions,
-		// 		price: s2,
-		// 		title: "s2",
-		// 	});
+		candlestickSeries.setMarkers(candlestickMarkers);
 	}
 
 	async connectedCallback() {
@@ -145,7 +91,14 @@ class WatchlistChart extends HTMLElement {
 		);
 	}
 
-	attributeChangedCallback(name, oldValue, newValue) {
+	attributeChangedCallback(
+		name: "symbol" | "interval" | "start" | "end",
+		oldValue: string | null,
+		newValue: string | null,
+	) {
+		if (oldValue === newValue) {
+			return;
+		}
 		this[name] = newValue;
 
 		if (this.debounceTimeout) {

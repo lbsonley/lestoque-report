@@ -3,8 +3,8 @@ import { createChart } from "lightweight-charts";
 export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 	const chart = createChart(wrapper as string | HTMLElement, {
 		autoSize: true,
-		handleScale: true,
-		handleScroll: true,
+		handleScale: false,
+		handleScroll: false,
 		timeScale: {
 			rightOffset: 3,
 			timeVisible: true,
