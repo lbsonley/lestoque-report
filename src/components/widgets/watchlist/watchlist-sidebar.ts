@@ -45,14 +45,51 @@ const styles = `
 `;
 const template = document.createElement("template");
 
+type NullableString = string | undefined | null;
 class WatchlistSidebar extends HTMLElement {
 	symbolRadios: NodeList | null = null;
 
 	static observedAttributes = ["securities"];
 
+	buildLabel = (
+		symbol: NullableString,
+		name: NullableString,
+		sector: NullableString,
+		subIndustry: NullableString,
+	) => {
+		let label = `<h4 class="watchlist__symbol">${name} (${symbol})</h4>`;
+		label = sector
+			? label +
+			  `
+			<span class="watchlist__sector"> <strong>Sector:</strong>&nbsp;${sector} </span>
+		`
+			: label;
+		label = subIndustry
+			? label +
+			  `
+			<span class="watchlist__sector"> <strong>Sub-Industry:</strong>&nbsp;${subIndustry} </span>
+		`
+			: label;
+
+		return label;
+	};
+
 	buildSidebarItems = (securities) => {
 		return securities.reduce(
-			(sidebarItems, { symbol, name, sector, subIndustry }) => {
+			(
+				sidebarItems,
+				{
+					symbol,
+					name,
+					sector,
+					subIndustry,
+				}: {
+					symbol: NullableString;
+					name: NullableString;
+					sector: NullableString;
+					subIndustry: NullableString;
+				},
+			) => {
 				sidebarItems += `
 			<input
 				class="visually-hidden"
@@ -63,15 +100,7 @@ class WatchlistSidebar extends HTMLElement {
 				data-watchlist="symbol"
 			/>
 			<label class="watchlist__label" for=${symbol}>
-				<h4 class="watchlist__symbol">
-					${name} (${symbol})
-				</h5>
-				<span class="watchlist__sector">
-					<strong>Sector:</strong>&nbsp;${sector}
-				</span>
-				<span class="watchlist__sector">
-					<strong>Sub-Industry:</strong>&nbsp;${subIndustry}
-				</span>
+				${this.buildLabel(symbol, name, sector, subIndustry)}
 			</label>
 			`;
 
