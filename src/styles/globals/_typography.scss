@@ -2,7 +2,7 @@
 
 html {
 	color: variables.$color-black;
-	font-family: variables.$font-family-base;
+	font-family: variables.$font-family-sans;
 	font-size: variables.$font-size-base;
 	line-height: variables.$line-height-base;
 }
@@ -14,7 +14,7 @@ h4,
 h5,
 h6 {
 	color: variables.$color-blue-600;
-	font-family: variables.$font-family-base;
+	font-family: variables.$font-family-serif;
 	font-weight: variables.$font-weight-normal;
 	line-height: variables.$line-height-headings;
 }
@@ -49,7 +49,7 @@ p {
 
 .lead {
 	color: variables.$color-blue-600;
-	font-family: variables.$font-family-italic;
+	font-family: variables.$font-family-serif-italic;
 	font-size: variables.$font-size-h4;
 	font-weight: variables.$font-weight-bold;
 }

@@ -16,8 +16,26 @@
 	font-display: swap;
 }
 
-$font-family-base: sortsmillgoudy, serif;
-$font-family-italic: sortsmillgoudy-italic, serif;
+@font-face {
+	font-family: "sourcesans";
+	font-style: normal;
+	font-weight: 400;
+	src: url("/fonts/SourceSans3-VariableFont_wght.ttf") format("truetype");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "sourcesans-italic";
+	font-style: normal;
+	font-weight: 400;
+	src: url("/fonts/SourceSans3-Italic-VariableFont_wght.ttf") format("truetype");
+	font-display: swap;
+}
+
+$font-family-serif: sortsmillgoudy, serif;
+$font-family-serif-italic: sortsmillgoudy-italic, serif;
+$font-family-sans: sourcesans, sans-serif;
+$font-family-sans-italic: sourcesans-italic, sans-serif;
 
 /* @link https://utopia.fyi/type/calculator?c=320,16,1.2,960,18,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
