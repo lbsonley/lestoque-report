@@ -56,6 +56,9 @@ class WatchlistChart extends HTMLElement {
 	}
 
 	async updateChart() {
+		if (!this.symbol) {
+			return;
+		}
 		const { chart, candlestickSeries, volumeSeries } = this.chartInstance;
 
 		this.updateCount += 1;

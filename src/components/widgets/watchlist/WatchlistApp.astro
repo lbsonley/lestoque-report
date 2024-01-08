@@ -1,26 +1,22 @@
 ---
 import LWatchlist from "~/layouts/LWatchlist.astro";
-
-interface Props {
-	listName: string;
-}
-
-const { listName } = Astro.props;
 ---
 
-<watchlist-app list-name={listName}>
+<watchlist-app>
 	<LWatchlist
 		metaTitle="Watchlist | Lestoque Report"
 		metaDescription="Stocks to trade."
 	>
+		<watchlist-list-options slot="list-options"></watchlist-list-options>
 		<watchlist-sidebar slot="sidebar"></watchlist-sidebar>
-		<watchlist-chart-options slot="options"></watchlist-chart-options>
+		<watchlist-chart-options slot="chart-options"></watchlist-chart-options>
 		<watchlist-chart slot="main"></watchlist-chart>
 		<position-sizer slot="position-sizer"></position-sizer>
 	</LWatchlist>
 </watchlist-app>
 
 <script>
+	import "./watchlist-list-options";
 	import "./watchlist-sidebar";
 	import "./watchlist-chart";
 	import "./watchlist-chart-options";
@@ -70,22 +66,29 @@ const { listName } = Astro.props;
 				? "https://yf-api.vercel.app"
 				: "http://localhost:8000";
 
-			const request = await fetch(`${domain}/api/${this.listName}`);
+			const request = await fetch(
+				`${domain}/api/watchlists?list_name=${this.listName}`,
+			);
 			const response = await request.json();
 			return response.items;
 		}
 
-		async connectedCallback() {
-			this.sidebarEl = this.querySelector("watchlist-sidebar");
-			this.chartEl = this.querySelector("watchlist-chart");
-			this.optionsEl = this.querySelector("watchlist-chart-options");
-
+		async updateWatchlist() {
+			if (!this.listName) {
+				return;
+			}
 			this.securities = await this.fetchList();
 
 			this.sidebarEl!.setAttribute(
 				"securities",
 				JSON.stringify(this.securities),
 			);
+		}
+
+		async connectedCallback() {
+			this.sidebarEl = this.querySelector("watchlist-sidebar");
+			this.chartEl = this.querySelector("watchlist-chart");
+			this.optionsEl = this.querySelector("watchlist-chart-options");
 
 			state.chartOptions$.subscribe((options) => {
 				options.symbol && this.chartEl!.setAttribute("symbol", options.symbol);
@@ -97,6 +100,11 @@ const { listName } = Astro.props;
 					);
 					this.chartEl!.setAttribute("end", formatDate(this.endDate));
 				}
+			});
+
+			state.selectedWatchlist$.subscribe((listName) => {
+				this.listName = listName;
+				this.updateWatchlist();
 			});
 		}
 

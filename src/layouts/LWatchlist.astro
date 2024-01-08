@@ -25,19 +25,22 @@ const { metaTitle, metaDescription } = Astro.props;
 		<div class="watchlist">
 			<Header title="Lestoque Report" />
 			<aside class="watchlist__sidebar-pane">
-				<slot name="sidebar" />
+				<div class="watchlist__sidebar-options">
+					<slot name="list-options" />
+				</div>
+				<div class="watchlist__list-wrapper">
+					<slot name="sidebar" />
+				</div>
 			</aside>
 			<main class="watchlist__main-pane">
-				<div class="watchlist__main-pane-inner">
-					<div class="watchlist__options">
-						<slot name="options" />
-					</div>
-					<div class="watchlist__chart">
-						<slot name="main" />
-					</div>
-					<div class="watchlist__position-sizer">
-						<slot name="position-sizer" />
-					</div>
+				<div class="watchlist__chart-options">
+					<slot name="chart-options" />
+				</div>
+				<div class="watchlist__chart">
+					<slot name="main" />
+				</div>
+				<div class="watchlist__position-sizer">
+					<slot name="position-sizer" />
 				</div>
 			</main>
 			<Footer />
@@ -60,30 +63,31 @@ const { metaTitle, metaDescription } = Astro.props;
 	}
 
 	.watchlist__sidebar-pane {
+		display: grid;
 		position: relative;
 		grid-column: 1 / 2;
+		grid-row: 2 / -1;
+		grid-template-rows: 60px 1fr;
+		align-items: center;
+	}
+
+	.watchlist__list-wrapper {
 		height: 100%;
-		max-height: calc(100vw - 100px);
+		max-height: calc(100vw - 160px);
 		overflow: hidden scroll;
 	}
 
 	.watchlist__main-pane {
-		display: flex;
+		display: grid;
 		position: relative;
 		grid-column: 2 / 3;
+		grid-row: 2 / -1;
+		grid-template-rows: 60px 1fr 1fr;
 		flex-direction: column;
-		height: 100%;
-		max-height: calc(100vw - 100px);
-		overflow: hidden scroll;
-	}
-
-	.watchlist__main-pane-inner {
+		align-items: center;
 		max-width: variables.$max-content-width-wide;
+		max-height: calc(100vh - 100px);
 		margin: 0 variables.$space-16;
-	}
-
-	.watchlist__position-sizer,
-	.watchlist__options {
-		margin: variables.$space-24 0;
+		overflow: hidden scroll;
 	}
 </style>
