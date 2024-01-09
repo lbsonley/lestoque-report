@@ -28,7 +28,7 @@ class WatchlistListOptions extends HTMLElement {
 			return acc;
 		}, "");
 
-		this.watchlistEl!.innerHTML = watchlistOptionsMarkup;
+		this.watchlistEl!.innerHTML = watchlistOptionsMarkup!;
 	}
 
 	handleWatchlistChange(event: Event) {
