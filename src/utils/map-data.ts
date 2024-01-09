@@ -20,6 +20,7 @@ export interface StudyDataItem {
 }
 
 export type CandlestickPatterns =
+	| "darkcloudcover"
 	| "doji"
 	| "dojistar"
 	| "engulfing"
@@ -44,16 +45,17 @@ const patternMap: {
 		position: SeriesMarkerPosition;
 	};
 } = {
-	doji: { abbr: "d", position: "inBar" },
-	dojistar: { abbr: "ds", position: "inBar" },
-	engulfing: { abbr: "en", position: "inBar" },
+	darkcloudcover: { abbr: "dcc", position: "aboveBar" },
+	doji: { abbr: "d", position: "aboveBar" },
+	dojistar: { abbr: "ds", position: "aboveBar" },
+	engulfing: { abbr: "en", position: "aboveBar" },
 	eveningdojistar: { abbr: "eds", position: "aboveBar" },
 	eveningstar: { abbr: "es", position: "aboveBar" },
-	hammer: { abbr: "hmr", position: "inBar" },
+	hammer: { abbr: "hmr", position: "aboveBar" },
 	hangingman: { abbr: "hm", position: "aboveBar" },
 	morningdojistar: { abbr: "mds", position: "belowBar" },
 	morningstar: { abbr: "ms", position: "belowBar" },
-	piercing: { abbr: "p", position: "aboveBar" },
+	piercing: { abbr: "p", position: "belowBar" },
 };
 
 export const mapPriceData: (data: PriceDataRaw) => PriceData = (data) =>
@@ -82,7 +84,7 @@ export const mapCandlestickSignals: (
 			for (const time of signals) {
 				markers.push({
 					time: new Date(time).getTime() / 1000,
-					position: "aboveBar" as SeriesMarkerPosition,
+					position: patternMap[key as CandlestickPatterns].position,
 					color: "#f68410",
 					shape: "circle" as SeriesMarkerShape,
 					text: patternMap[key as CandlestickPatterns].abbr,
