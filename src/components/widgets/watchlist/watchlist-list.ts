@@ -27,8 +27,7 @@ const styles = `
 	}
 
 	.watchlist__symbol {
-		margin-top: 0;
-		margin-bottom: 12px;
+		margin: 0;
 		font-size: 24px;
 
 	}
@@ -46,7 +45,7 @@ const styles = `
 const template = document.createElement("template");
 
 type NullableString = string | undefined | null;
-class WatchlistSidebar extends HTMLElement {
+class WatchlistList extends HTMLElement {
 	symbolRadios: NodeList | null = null;
 
 	static observedAttributes = ["securities"];
@@ -174,4 +173,4 @@ class WatchlistSidebar extends HTMLElement {
 	}
 }
 
-customElements.define("watchlist-sidebar", WatchlistSidebar);
+customElements.define("watchlist-list", WatchlistList);

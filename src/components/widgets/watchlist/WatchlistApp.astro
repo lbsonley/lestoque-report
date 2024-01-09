@@ -8,7 +8,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		metaDescription="Stocks to trade."
 	>
 		<watchlist-list-options slot="list-options"></watchlist-list-options>
-		<watchlist-sidebar slot="sidebar"></watchlist-sidebar>
+		<watchlist-list slot="sidebar"></watchlist-list>
 		<watchlist-chart-options slot="chart-options"></watchlist-chart-options>
 		<watchlist-chart slot="main"></watchlist-chart>
 		<position-sizer slot="position-sizer"></position-sizer>
@@ -17,7 +17,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 
 <script>
 	import "./watchlist-list-options";
-	import "./watchlist-sidebar";
+	import "./watchlist-list";
 	import "./watchlist-chart";
 	import "./watchlist-chart-options";
 	import "./position-sizer";
@@ -86,7 +86,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		}
 
 		async connectedCallback() {
-			this.sidebarEl = this.querySelector("watchlist-sidebar");
+			this.sidebarEl = this.querySelector("watchlist-list");
 			this.chartEl = this.querySelector("watchlist-chart");
 			this.optionsEl = this.querySelector("watchlist-chart-options");
 
