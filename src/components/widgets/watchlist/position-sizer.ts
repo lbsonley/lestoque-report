@@ -9,7 +9,8 @@ template.innerHTML = `
 }
 
 .position-sizer--field {
-	display: flex;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 </style>
 <form class="position-sizer">
