@@ -3,8 +3,10 @@ import {
 	mapPriceData,
 	mapVolumeData,
 	mapCandlestickSignals,
+	mapPivotLines,
 } from "@utils/map-data.ts";
 import type { PriceData, StudyData } from "@utils/map-data.ts";
+import { SupportResistance } from "@plugins/support-resistance";
 
 const styles = `
 <style>
@@ -27,6 +29,7 @@ class WatchlistChart extends HTMLElement {
 	end: string | null = null;
 	updateCount = 0;
 	debounceTimeout: number | null = null;
+	supportResistancePrimitives: SupportResistance[] = [];
 
 	static observedAttributes = ["symbol", "interval", "start", "end"];
 
@@ -66,11 +69,13 @@ class WatchlistChart extends HTMLElement {
 
 		const url = this.buildUrl();
 
-		const { history, candlestickSignals } = await this.fetchHistory(url);
+		const { history, candlestickSignals, pivots } =
+			await this.fetchHistory(url);
 
 		const priceData: PriceData = mapPriceData(history);
 		const volumeData: StudyData = mapVolumeData(history);
 		const candlestickMarkers = mapCandlestickSignals(candlestickSignals);
+		const pivotData = mapPivotLines(pivots, priceData);
 
 		chart.applyOptions({
 			watermark: {
@@ -83,6 +88,23 @@ class WatchlistChart extends HTMLElement {
 		chart.timeScale().fitContent();
 
 		candlestickSeries.setMarkers(candlestickMarkers);
+
+		// remove an previously rendered support/resistance
+		for (const sr of this.supportResistancePrimitives) {
+			candlestickSeries.detachPrimitive(sr);
+		}
+
+		// create support and resistance lines
+		for (const pivot of pivotData) {
+			const sr = new SupportResistance(
+				chart,
+				candlestickSeries,
+				{ time: pivot.start, price: pivot.value },
+				{ time: pivot.end, price: pivot.value },
+			);
+			this.supportResistancePrimitives.push(sr);
+			candlestickSeries.attachPrimitive(sr);
+		}
 	}
 
 	async connectedCallback() {
