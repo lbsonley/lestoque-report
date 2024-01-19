@@ -4,6 +4,7 @@ import {
 	mapVolumeData,
 	mapCandlestickSignals,
 	mapPivotLines,
+	mapTrendlineData,
 } from "@utils/map-data.ts";
 import type { PriceData, StudyData } from "@utils/map-data.ts";
 import { SupportResistance } from "@plugins/support-resistance";
@@ -62,7 +63,13 @@ class WatchlistChart extends HTMLElement {
 		if (!this.symbol) {
 			return;
 		}
-		const { chart, candlestickSeries, volumeSeries } = this.chartInstance;
+		const {
+			chart,
+			candlestickSeries,
+			volumeSeries,
+			lowerTrendSeries,
+			upperTrendSeries,
+		} = this.chartInstance;
 
 		this.updateCount += 1;
 		console.log(this.updateCount);
@@ -76,6 +83,7 @@ class WatchlistChart extends HTMLElement {
 		const volumeData: StudyData = mapVolumeData(history);
 		const candlestickMarkers = mapCandlestickSignals(candlestickSignals);
 		const pivotData = mapPivotLines(pivots, priceData);
+		const trendlineData = mapTrendlineData(history);
 
 		chart.applyOptions({
 			watermark: {
@@ -88,6 +96,9 @@ class WatchlistChart extends HTMLElement {
 		chart.timeScale().fitContent();
 
 		candlestickSeries.setMarkers(candlestickMarkers);
+
+		lowerTrendSeries.setData(trendlineData.lower);
+		upperTrendSeries.setData(trendlineData.upper);
 
 		// remove an previously rendered support/resistance
 		for (const sr of this.supportResistancePrimitives) {

@@ -13,6 +13,8 @@ export type PriceDataRaw = Array<{
 	low: number;
 	close: number;
 	volume: number;
+	upper_trend: number;
+	lower_trend: number;
 }>;
 
 export interface StudyDataItem {
@@ -87,6 +89,26 @@ export const mapVolumeData: (data: PriceDataRaw) => StudyData = (data) =>
 		time: (new Date(datetime).getTime() / 1000) as UTCTimestamp,
 		value: volume,
 	}));
+
+interface TrendlineData {
+	upper: StudyData;
+	lower: StudyData;
+}
+export const mapTrendlineData: (data: PriceDataRaw) => TrendlineData = (
+	data,
+) => {
+	const upper = data.map(({ datetime, upper_trend }) => ({
+		time: (new Date(datetime).getTime() / 1000) as UTCTimestamp,
+		value: upper_trend,
+	}));
+
+	const lower = data.map(({ datetime, lower_trend }) => ({
+		time: (new Date(datetime).getTime() / 1000) as UTCTimestamp,
+		value: lower_trend,
+	}));
+
+	return { upper, lower };
+};
 
 export const mapCandlestickSignals: (
 	data: CandlestickSignalsData,
