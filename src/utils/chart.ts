@@ -5,7 +5,7 @@ export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 		autoSize: true,
 		crosshair: { mode: CrosshairMode.Normal },
 		handleScale: true,
-		handleScroll: true,
+		handleScroll: false,
 		timeScale: {
 			rightOffset: 3,
 			timeVisible: true,

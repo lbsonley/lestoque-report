@@ -8,6 +8,7 @@ import {
 } from "@utils/map-data.ts";
 import type { PriceData, StudyData } from "@utils/map-data.ts";
 import { SupportResistance } from "@plugins/support-resistance";
+import { DeltaTooltipPrimitive } from "@plugins/delta-tooltip/delta-tooltip";
 
 const styles = `
 <style>
@@ -99,6 +100,13 @@ class WatchlistChart extends HTMLElement {
 
 		lowerTrendSeries.setData(trendlineData.lower);
 		upperTrendSeries.setData(trendlineData.upper);
+
+		// add tooltip plugin
+		const tooltipPrimitive = new DeltaTooltipPrimitive({
+			lineColor: "rgba(0, 0, 0, 0.2)",
+		});
+
+		candlestickSeries.attachPrimitive(tooltipPrimitive);
 
 		// remove an previously rendered support/resistance
 		for (const sr of this.supportResistancePrimitives) {
