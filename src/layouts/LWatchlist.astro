@@ -33,14 +33,16 @@ const { metaTitle, metaDescription } = Astro.props;
 				</div>
 			</aside>
 			<main class="watchlist__main-pane">
-				<div class="watchlist__chart-options">
-					<slot name="chart-options" />
-				</div>
-				<div class="watchlist__chart">
-					<slot name="main" />
-				</div>
-				<div class="watchlist__position-sizer">
-					<slot name="position-sizer" />
+				<div class="watchlist__main-pane-inner">
+					<div class="watchlist__chart-options">
+						<slot name="chart-options" />
+					</div>
+					<div class="watchlist__chart">
+						<slot name="main" />
+					</div>
+					<div class="watchlist__position-sizer">
+						<slot name="position-sizer" />
+					</div>
 				</div>
 			</main>
 			<Footer />
@@ -78,16 +80,18 @@ const { metaTitle, metaDescription } = Astro.props;
 	}
 
 	.watchlist__main-pane {
-		display: grid;
 		position: relative;
 		grid-column: 2 / 3;
 		grid-row: 2 / -1;
-		grid-template-rows: 60px 1fr 1fr;
-		flex-direction: column;
+		max-height: calc(100vh - 100px);
+		overflow: hidden scroll;
+	}
+
+	.watchlist__main-pane-inner {
+		display: grid;
+		grid-template-rows: 60px 1fr auto;
 		align-items: center;
 		max-width: variables.$max-content-width-wide;
-		max-height: calc(100vh - 100px);
 		margin: 0 variables.$space-16;
-		overflow: hidden scroll;
 	}
 </style>
