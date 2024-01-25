@@ -55,8 +55,8 @@ export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 
 	lowerTrendSeries.priceScale().applyOptions({
 		scaleMargins: {
-			top: 0.1, // highest point of the series will be 10% away from the top
-			bottom: 0.2, // lowest point will be 20% away from the bottom
+			top: 0.05, // highest point of the series will be 5% away from the top
+			bottom: 0.1, // lowest point will be 10% away from the bottom
 		},
 	});
 
@@ -70,8 +70,8 @@ export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 
 	upperTrendSeries.priceScale().applyOptions({
 		scaleMargins: {
-			top: 0.1, // highest point of the series will be 10% away from the top
-			bottom: 0.2, // lowest point will be 20% away from the bottom
+			top: 0.05, // highest point of the series will be 5% away from the top
+			bottom: 0.1, // lowest point will be 10% away from the bottom
 		},
 	});
 
@@ -86,7 +86,7 @@ export const useChart = (wrapper: string | HTMLElement, symbol: string) => {
 
 	volumeSeries.priceScale().applyOptions({
 		scaleMargins: {
-			top: 0.8, // highest point of the series will be 80% away from the top
+			top: 0.9, // highest point of the series will be 90% away from the top
 			bottom: 0,
 		},
 	});
