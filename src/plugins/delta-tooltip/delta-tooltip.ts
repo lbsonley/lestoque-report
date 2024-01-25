@@ -27,23 +27,41 @@ const defaultOptions: TooltipPrimitiveOptions = {
 	lineColor: "rgba(0, 0, 0, 0.2)",
 	priceExtractor: (data: LineData | CandlestickData | WhitespaceData) => {
 		if ((data as LineData).value !== undefined) {
-			return [(data as LineData).value, (data as LineData).value.toFixed(2)];
+			return {
+				close: [(data as LineData).value, (data as LineData).value.toFixed(2)],
+			};
 		}
 		if ((data as CandlestickData).close !== undefined) {
-			return [
-				(data as CandlestickData).close,
-				(data as CandlestickData).close.toFixed(2),
-			];
+			return {
+				high: [
+					(data as CandlestickData).high,
+					(data as CandlestickData).high.toFixed(2),
+				],
+				low: [
+					(data as CandlestickData).low,
+					(data as CandlestickData).low.toFixed(2),
+				],
+				close: [
+					(data as CandlestickData).close,
+					(data as CandlestickData).close.toFixed(2),
+				],
+			};
 		}
-		return [0, ""];
+		return { close: [0, ""] };
 	},
-	showTime: false,
+	showTime: true,
 	topOffset: 5,
 };
 
 export interface TooltipPrimitiveOptions {
 	lineColor: string;
-	priceExtractor: <T extends WhitespaceData>(dataPoint: T) => [number, string];
+	priceExtractor: <T extends WhitespaceData>(
+		dataPoint: T,
+	) => {
+		high?: [number, string];
+		low?: [number, string];
+		close: [number, string];
+	};
 	showTime: boolean;
 	topOffset: number;
 }
@@ -229,15 +247,16 @@ export class DeltaTooltipPrimitive implements ISeriesPrimitive<Time> {
 			const point = interactions.points[i];
 			const data = series.dataByIndex(point.index);
 			if (data) {
-				const [priceValue, priceString] = this._options.priceExtractor(data);
-				priceValues.push([priceValue, point.index]);
-				const priceY = series.priceToCoordinate(priceValue) ?? -1000;
+				// const [priceValue, priceString] = this._options.priceExtractor(data);
+				const { high, low, close } = this._options.priceExtractor(data);
+				priceValues.push([close[0], point.index]);
+				const priceY = series.priceToCoordinate(close[0]) ?? -1000;
 				const [date, time] = formattedDateAndTime(
 					data.time ? convertTime(data.time) : undefined,
 				);
 				const state: DeltaSingleTooltipData = {
 					x: point.x,
-					lineContent: [priceString, date],
+					lineContent: [high![1], low![1], close[1], date],
 				};
 				if (this._options.showTime) {
 					state.lineContent.push(time);

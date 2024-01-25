@@ -19,10 +19,10 @@ const styles = {
 	itemBlockPadding: 5,
 	itemInlinePadding: 10,
 
-	tooltipLineFontWeights: [590, 400, 400] as number[],
-	tooltipLineFontSizes: [14, 12, 12] as number[],
-	tooltipLineLineHeights: [18, 16, 16] as number[],
-	tooltipLineColors: ["#131722", "#787B86", "#787B86"],
+	tooltipLineFontWeights: [590, 590, 590, 400, 400] as number[],
+	tooltipLineFontSizes: [14, 14, 14, 12, 12] as number[],
+	tooltipLineLineHeights: [18, 18, 18, 16, 16] as number[],
+	tooltipLineColors: ["#131722", "#131722", "#131722", "#787B86", "#787B86"],
 
 	deltaFontWeights: [590, 400] as number[],
 	deltaFontSizes: [14, 12] as number[],
@@ -313,12 +313,14 @@ class DeltaTooltipPaneRenderer implements ISeriesPrimitivePaneRenderer {
 						? positions.leftTooltipTextY
 						: positions.rightTooltipTextY);
 
+				const priceLabels = ["h", "l", "c", "d", "t"];
+
 				tooltip.lineContent.forEach((line: string, lineIndex: number) => {
 					ctx.font = `${styles.tooltipLineFontWeights[lineIndex]} ${styles.tooltipLineFontSizes[lineIndex]}px ${styles.fontFamily}`;
 					ctx.fillStyle = styles.tooltipLineColors[lineIndex];
 					ctx.textAlign = "center";
 					ctx.textBaseline = "top";
-					ctx.fillText(line, x, y);
+					ctx.fillText(`${priceLabels[lineIndex]}: ${line}`, x, y);
 					y += styles.tooltipLineLineHeights[lineIndex];
 				});
 			},
