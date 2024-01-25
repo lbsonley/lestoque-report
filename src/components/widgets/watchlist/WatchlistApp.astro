@@ -28,6 +28,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		sidebarEl: HTMLElement | null = null;
 		chartEl: HTMLElement | null = null;
 		optionsEl: HTMLElement | null = null;
+		positionSizerEl: HTMLElement | null = null;
 		listName: string | null = null;
 		securities: any[] = [];
 		startDate: Date = new Date();
@@ -89,8 +90,11 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 			this.sidebarEl = this.querySelector("watchlist-list");
 			this.chartEl = this.querySelector("watchlist-chart");
 			this.optionsEl = this.querySelector("watchlist-chart-options");
+			this.positionSizerEl = this.querySelector("position-sizer");
 
 			state.chartOptions$.subscribe((options) => {
+				options.symbol &&
+					this.positionSizerEl!.setAttribute("symbol", options.symbol);
 				options.symbol && this.chartEl!.setAttribute("symbol", options.symbol);
 				if (options.interval) {
 					this.chartEl!.setAttribute("interval", options.interval);
