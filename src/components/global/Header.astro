@@ -1,4 +1,5 @@
 ---
+import Nav from "./Nav.astro";
 import Icon from "../Icon/Icon.astro";
 interface Props {
 	title: string;
@@ -15,10 +16,11 @@ const { title } = Astro.props;
 			</a>
 			<h1 class="site-title">{title}</h1>
 		</div>
-		<nav class="header__nav">
+		<!-- <nav class="header__nav">
 			<a class="header__link" href="/watchlists">Watchlists</a>
 			<a class="header__link" href="/trades">Trades</a>
-		</nav>
+		</nav> -->
+		<Nav />
 	</div>
 </header>
 
