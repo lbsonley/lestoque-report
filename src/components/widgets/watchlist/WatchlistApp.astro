@@ -12,6 +12,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		<watchlist-chart-options slot="chart-options"></watchlist-chart-options>
 		<watchlist-chart slot="main"></watchlist-chart>
 		<position-sizer slot="position-sizer"></position-sizer>
+		<watchlist-commentary slot="commentary"></watchlist-commentary>
 	</LWatchlist>
 </watchlist-app>
 
@@ -20,6 +21,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 	import "./watchlist-list";
 	import "./watchlist-chart";
 	import "./watchlist-chart-options";
+	import "./watchlist-commentary";
 	import "./position-sizer";
 	import state from "@state/watchlist-state";
 	import { formatDate } from "@utils/format";
@@ -29,6 +31,7 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 		chartEl: HTMLElement | null = null;
 		optionsEl: HTMLElement | null = null;
 		positionSizerEl: HTMLElement | null = null;
+		commentaryEl: HTMLElement | null = null;
 		listName: string | null = null;
 		securities: any[] = [];
 		startDate: Date = new Date();
@@ -91,8 +94,11 @@ import LWatchlist from "~/layouts/LWatchlist.astro";
 			this.chartEl = this.querySelector("watchlist-chart");
 			this.optionsEl = this.querySelector("watchlist-chart-options");
 			this.positionSizerEl = this.querySelector("position-sizer");
+			this.commentaryEl = this.querySelector("watchlist-commentary");
 
 			state.chartOptions$.subscribe((options) => {
+				options.symbol &&
+					this.commentaryEl!.setAttribute("symbol", options.symbol);
 				options.symbol &&
 					this.positionSizerEl!.setAttribute("symbol", options.symbol);
 				options.symbol && this.chartEl!.setAttribute("symbol", options.symbol);

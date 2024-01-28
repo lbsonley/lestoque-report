@@ -45,6 +45,9 @@ const { metaTitle, metaDescription } = Astro.props;
 					</div>
 				</div>
 			</main>
+			<aside class="watchlist__sidebar-commentary">
+				<slot name="commentary" />
+			</aside>
 			<Footer />
 		</div>
 	</body>
@@ -57,7 +60,7 @@ const { metaTitle, metaDescription } = Astro.props;
 	.watchlist {
 		display: grid;
 		position: relative;
-		grid-template-columns: 300px 1fr;
+		grid-template-columns: 300px 1fr 400px;
 		grid-template-rows: 60px 1fr 40px;
 		width: 100vw;
 		height: 100vh;
@@ -71,6 +74,12 @@ const { metaTitle, metaDescription } = Astro.props;
 		grid-row: 2 / -1;
 		grid-template-rows: 60px 1fr;
 		align-items: center;
+	}
+
+	.watchlist__sidebar-commentary {
+		position: relative;
+		grid-column: 3 / 4;
+		grid-row: 2 / -1;
 	}
 
 	.watchlist__list-wrapper {
