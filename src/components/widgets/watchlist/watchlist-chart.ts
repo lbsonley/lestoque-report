@@ -99,7 +99,7 @@ class WatchlistChart extends HTMLElement {
 		candlestickSeries.setMarkers(candlestickMarkers);
 
 		lowerTrendSeries.setData(trendlineData.lower);
-		// upperTrendSeries.setData(trendlineData.upper);
+		upperTrendSeries.setData(trendlineData.upper);
 
 		// add tooltip plugin
 		const tooltipPrimitive = new DeltaTooltipPrimitive({

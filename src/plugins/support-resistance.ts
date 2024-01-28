@@ -115,8 +115,8 @@ class SupportResistancePaneView implements ISeriesPrimitivePaneView {
 		return new SupportResistancePaneRenderer(
 			this._p1,
 			this._p2,
-			"" + this._source._p1.price.toFixed(1),
-			"" + this._source._p2.price.toFixed(1),
+			"" + this._source._p1.price.toFixed(2),
+			"" + this._source._p2.price.toFixed(2),
 			this._source._options,
 		);
 	}
