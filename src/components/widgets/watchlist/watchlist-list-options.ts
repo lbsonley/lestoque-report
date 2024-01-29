@@ -12,7 +12,9 @@ template.innerHTML = `
 		<fieldset class="list-options__fieldset">
 			<label for="watchlist">Watchlist</label>
 			<select id="watchlist" name="watchlist">
-				
+				<option value="outperformers" label="Outperformers" />\n
+				<option value="etfs" label="Index and Sector ETFs" />\n
+				<option value="holdings" label="Holdings" selected />\n
 			</select>
 		</fieldset>
 	</form>
@@ -22,15 +24,6 @@ class WatchlistListOptions extends HTMLElement {
 	watchlistEl: HTMLSelectElement | null = null;
 	watchlistItems: string[] | null = null;
 
-	buildWatchlistOptions() {
-		const watchlistOptionsMarkup = this.watchlistItems?.reduce((acc, item) => {
-			acc += `<option value="${item}" label="${item}" />\n`;
-			return acc;
-		}, "");
-
-		this.watchlistEl!.innerHTML = watchlistOptionsMarkup!;
-	}
-
 	handleWatchlistChange(event: Event) {
 		state.updateWatchlist((event.target as HTMLInputElement).value);
 	}
@@ -38,11 +31,6 @@ class WatchlistListOptions extends HTMLElement {
 	async render() {
 		this.shadowRoot?.appendChild(template.content.cloneNode(true));
 		this.watchlistEl = this.shadowRoot!.querySelector("#watchlist");
-
-		const request = await fetch("http://localhost:8000/api/watchlist-names");
-		const response = await request.json();
-		this.watchlistItems = response;
-		this.buildWatchlistOptions();
 
 		this.watchlistEl!.addEventListener("change", this.handleWatchlistChange);
 
