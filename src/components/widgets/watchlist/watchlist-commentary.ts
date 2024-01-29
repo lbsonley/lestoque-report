@@ -1,5 +1,3 @@
-import { round } from "@utils/format";
-
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
@@ -53,8 +51,6 @@ class WatchlistCommentary extends HTMLElement {
 		event.preventDefault();
 
 		const formData = new FormData(this.formEl!);
-
-		console.log(this.getAttribute("symbol"));
 
 		await fetch(
 			`http://localhost:8000/api/commentary?symbol=${this.getAttribute(
@@ -114,10 +110,10 @@ class WatchlistCommentary extends HTMLElement {
 
 			const response = await request.json();
 
-			this.monthlyEl!.value = response.monthly;
-			this.weeklyEl!.value = response.weekly;
-			this.dailyEl!.value = response.daily;
-			this.ninetyMinEl!.value = response.ninetyMin;
+			this.monthlyEl!.value = response.monthly || "";
+			this.weeklyEl!.value = response.weekly || "";
+			this.dailyEl!.value = response.daily || "";
+			this.ninetyMinEl!.value = response.ninetyMin || "";
 		}
 	}
 }
