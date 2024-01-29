@@ -16,6 +16,13 @@ template.innerHTML = `
 <form class="position-sizer" id="position-sizer-form">
 <input id="symbol" class="input" type="hidden" name="symbol" value="" autocomplete="off" />
 	<div class="position-sizer--field">
+		<label for="direction">Direction</label>
+		<select id="direction" class="input" name="direction">
+			<option label="Long" value="long" />
+			<option label="Short" value="short" />
+		</select>
+	</div>
+	<div class="position-sizer--field">
 		<label for="portfolioValue">Portfolio Value</label>
 		<input id="portfolioValue" class="input" type="text" name="portfolioValue" value="" autocomplete="off" />
 	</div>
@@ -37,12 +44,12 @@ template.innerHTML = `
 		<input id="shares" class="input"type="text" name="shares" value="" />
 	</div>
 	<div class="position-sizer--field">
-		<label for="risk-reward">Risk/Reward</label>
-		<input id="risk-reward" class="input"type="text" name="risk-reward" value="" />
+		<label for="ratio">Risk/Reward</label>
+		<input id="ratio" class="input"type="text" name="ratio" value="" />
 	</div>
 	<div class="position-sizer--field">
-		<label for="risk-dollar">$Risk</label>
-		<input id="risk-dollar" class="input"type="text" name="risk-dollar" value="" />
+		<label for="risk">$Risk</label>
+		<input id="risk" class="input"type="text" name="risk" value="" />
 	</div>
 	<button class="position-sizer--button" type="submit" id="save">Save</button>
 </form>
@@ -50,13 +57,14 @@ template.innerHTML = `
 
 class PositionSizer extends HTMLElement {
 	symbolEl: HTMLInputElement | null = null;
+	directionEl: HTMLSelectElement | null = null;
 	portfolioValueEl: HTMLInputElement | null = null;
 	targetEl: HTMLInputElement | null = null;
 	stopEl: HTMLInputElement | null = null;
 	entryEl: HTMLInputElement | null = null;
 	sharesEl: HTMLInputElement | null = null;
-	riskRewardEl: HTMLInputElement | null = null;
-	riskDollarEl: HTMLInputElement | null = null;
+	ratioEl: HTMLInputElement | null = null;
+	riskEl: HTMLInputElement | null = null;
 	calculateEl: HTMLButtonElement | null = null;
 	formEl: HTMLFormElement | null = null;
 
@@ -70,7 +78,7 @@ class PositionSizer extends HTMLElement {
 			parseFloat(this.targetEl!.value) - parseFloat(this.entryEl!.value),
 		);
 		const riskReward = round(reward / risk);
-		this.riskRewardEl!.value = `${riskReward}`;
+		this.ratioEl!.value = `${riskReward}`;
 	}
 
 	handleCalculatePositionSize() {
@@ -81,7 +89,7 @@ class PositionSizer extends HTMLElement {
 		);
 		const shares = Math.floor(portfolioRisk / perShareRisk);
 		this.sharesEl!.value = `${shares}`;
-		this.riskDollarEl!.value = `${portfolioRisk}`;
+		this.riskEl!.value = `${portfolioRisk}`;
 	}
 
 	handleCalculate() {
@@ -96,24 +104,37 @@ class PositionSizer extends HTMLElement {
 		}
 	}
 
-	handleSave(event) {
+	async handleSave(event) {
 		event.preventDefault();
 
 		const formData = new FormData(this.formEl!);
 
-		console.log(Object.fromEntries(formData));
+		const data = Object.fromEntries(formData);
+
+		await fetch(
+			`http://localhost:8000/api/trade?symbol=${this.getAttribute("symbol")}`,
+			{
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data),
+			},
+		);
 	}
 
 	render() {
 		this.shadowRoot!.appendChild(template.content.cloneNode(true));
 		this.symbolEl = this.shadowRoot!.querySelector("#symbol");
 		this.portfolioValueEl = this.shadowRoot!.querySelector("#portfolioValue");
+		this.directionEl = this.shadowRoot!.querySelector("#direction");
 		this.targetEl = this.shadowRoot!.querySelector("#target");
 		this.stopEl = this.shadowRoot!.querySelector("#stop");
 		this.entryEl = this.shadowRoot!.querySelector("#entry");
 		this.sharesEl = this.shadowRoot!.querySelector("#shares");
-		this.riskRewardEl = this.shadowRoot!.querySelector("#risk-reward");
-		this.riskDollarEl = this.shadowRoot!.querySelector("#risk-dollar");
+		this.ratioEl = this.shadowRoot!.querySelector("#ratio");
+		this.riskEl = this.shadowRoot!.querySelector("#risk");
 		this.calculateEl = this.shadowRoot!.querySelector("#calc");
 		this.formEl = this.shadowRoot!.querySelector("#position-sizer-form");
 
@@ -130,8 +151,37 @@ class PositionSizer extends HTMLElement {
 		this.render();
 	}
 
-	attributeChangedCallback(name: "symbol", oldValue: string, newValue: string) {
+	async attributeChangedCallback(
+		name: "symbol",
+		oldValue: string,
+		newValue: string,
+	) {
 		this.symbolEl!.value = newValue;
+
+		if (newValue !== oldValue) {
+			const request = await fetch(
+				`http://localhost:8000/api/trade?symbol=${newValue}`,
+				{
+					method: "GET",
+					headers: {
+						"Access-Control-Allow-Origin": "*",
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+				},
+			);
+
+			const response = await request.json();
+
+			this.directionEl!.value = response.direction || "long";
+			this.portfolioValueEl!.value = response.portfolioValue || "";
+			this.entryEl!.value = response.entry || "";
+			this.stopEl!.value = response.stop || "";
+			this.targetEl!.value = response.target || "";
+			this.sharesEl!.value = response.shares || "";
+			this.ratioEl!.value = response.ratio || "";
+			this.riskEl!.value = response.risk || "";
+		}
 	}
 }
 
